@@ -1,5 +1,9 @@
 server:
   port: 8080
+  servlet:
+    session:
+      timeout: 1800 # 로그인 세션 유지시간 30분
+      tracking-modes: cookie
 
 spring:
   #datasource:
@@ -34,10 +38,11 @@ spring:
 
 logging.level:
   org.hibernate.SQL: debug
-  org.apache.coyote.http11: debug # http 요청 메시지 보기
+  #org.apache.coyote.http11: debug # http 요청 메시지 보기
 
 jwt:
   privateKey: I want to love. but lt is so difficult..
 
 spring.servlet.multipart.maxFileSize: 10MB
 spring.servlet.multipart.maxRequestSize: 10MB
+

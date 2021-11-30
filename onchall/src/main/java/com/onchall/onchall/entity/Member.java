@@ -36,4 +36,14 @@ public class Member {
     @JoinColumn(name="cart_id")
     private Cart cart;
 
+    public Member(String name, String email, String password){
+        this.name=name;
+        this.email=email;
+        this.password=password;
+        this.point=0;
+    }
+
+    public void setState(MemberState state) {
+        this.state = state;
+    }
 }
