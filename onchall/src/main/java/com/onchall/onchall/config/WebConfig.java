@@ -16,7 +16,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginCheckInterceptor()) //인터셉터 등록. 여기서 LoginCheckInterceptor()은 내가 구현한 클래스 이름이다.
                 .order(1) //낮을 수록 먼저 호출
                 .addPathPatterns("/**") //인터셉터를 적용할 url 패턴
-                .excludePathPatterns("/css/**", "/*.ico", "/error", "/login", "/signup"); //인터셉터에서 제외할 패턴 지정
+                .excludePathPatterns("/css/**", "/*.ico", "/error", "/login", "/signup",
+                        "/test/**", "/findPassword", "/changePassword"); //인터셉터에서 제외할 패턴 지정
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.onchall.onchall.controller;
+package com.onchall.onchall.controller.member;
 
 import com.onchall.onchall.dto.MemberDetail;
 import com.onchall.onchall.entity.Member;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-public class MemberController {
+public class LoginAndSignupController {
     private final MemberService memberService;
 
     @GetMapping("/health_check")
@@ -72,9 +72,21 @@ public class MemberController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request){
+    public String logout(HttpServletRequest request, Model model){
         HttpSession session = request.getSession(false);
         if (session != null) session.invalidate();
+        model.addAttribute("loginForm", new LoginForm());
+        return "member/login/login";
+    }
+
+    /**
+     * 더미 데이터 멤버 추가
+     */
+    @GetMapping("/test/member")
+    public String testMember(Model model){
+        Member signupMember = memberService.signup("testMember", "asdf@asdf.com", "asdfasdf@");
+        memberService.changeMemberState(signupMember.getEmail());
+        model.addAttribute("loginForm", new LoginForm());
         return "member/login/login";
     }
 }
