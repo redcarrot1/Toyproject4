@@ -18,10 +18,6 @@ public class OrderItem {
     private Integer price;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="file_data_id")
-    private FileData fileData;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="order_id")
     private Order order;
 }

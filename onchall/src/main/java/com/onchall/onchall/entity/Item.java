@@ -13,7 +13,7 @@ import java.util.List;
 public class Item {
     @Id
     @GeneratedValue
-    @Column(name="item_id")
+    @Column(name = "item_id")
     private Long id;
 
     private String name;
@@ -24,10 +24,14 @@ public class Item {
     @Lob
     private String description;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="file_data_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "file_data_id")
     private FileData fileData;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments= new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category")
+    private Category category;
 }

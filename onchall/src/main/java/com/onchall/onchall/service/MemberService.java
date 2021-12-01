@@ -1,14 +1,15 @@
 package com.onchall.onchall.service;
 
-import com.onchall.onchall.entity.Cart;
-import com.onchall.onchall.entity.Member;
-import com.onchall.onchall.entity.MemberState;
+import com.onchall.onchall.entity.*;
 import com.onchall.onchall.repository.CartRepository;
 import com.onchall.onchall.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -56,5 +57,23 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException("email 이 존재하지 않습니다."));
         member.setPassword(passwordEncoder.encode(newPassword));
         memberRepository.save(member);
+    }
+
+    public List<Purchased> getPurchased(Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 회원이 없습니다."));
+        return member.getPurchasedList();
+    }
+
+    public List<Point> getPointHistory(Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 회원이 없습니다."));
+        return member.getPointHistory();
+    }
+
+    public List<Order> getOrder(Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 회원이 없습니다."));
+        return member.getOrders();
     }
 }

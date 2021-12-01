@@ -53,10 +53,7 @@ public class LoginAndSignupController {
 
         HttpSession session = request.getSession();
         session.setAttribute("loginMember", loginMember);
-
-        model.addAttribute("member",
-                new MemberDetail(loginMember.getName(), loginMember.getEmail(), loginMember.getPoint()));
-        return "member/memberDetail";
+        return "redirect:/memberDetail/download";
     }
 
     @GetMapping("/signup")

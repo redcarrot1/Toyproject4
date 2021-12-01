@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>downloadList</title>
+</head>
+<body>
+<div th:object="${member}">
+    <h1>[[*{name}]]님 환영합니다.</h1>
+    email: <span th:text="*{email}">email</span><br>
+    point: <span th:text="*{point}">point</span>
+    <button type="button" disabled>다운로드</button>
+    <button type="button" onclick="location.href='/memberDetail/point'">포인트내역</button>
+    <button type="button" onclick="location.href='/memberDetail/order'">구매내역</button>
+
+    <th:block th:each="download : ${downloadList}">
+        <span th:text="${download.itemName}"></span>
+        <span th:text="${#temporals.format(download.expireDate, 'yyyy-MM-dd HH:mm')}"></span>
+        <a th:href="@{/download/{storeName}(storeName=${download.storeName})}">다운로드</a>
+    </th:block>
+</div>
+</body>
+</html>
