@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>comment</title>
+</head>
+<body>
+<form method="post" th:action="@{/commend/add/{itemId} (itemId=${itemId})}" th:object="${commentForm}">
+    <p>rating: <input type="number" min="1" max="5" th:field="*{rating}"/></p>
+    <p>content: <input type="text" th:field="*{content}"/></p>
+    <button>댓글쓰기</button>
+</form>
+</body>
+</html>

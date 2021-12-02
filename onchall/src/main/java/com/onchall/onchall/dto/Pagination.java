@@ -14,6 +14,12 @@ public class Pagination {
     boolean isEnd;
     Integer cntPage;
     Integer totalPage;
+    String category;
+    String sort;
 
     List<BoardItemDto> itemList;
+
+    public boolean isEnd() {
+        return isEnd;
+    }
 }

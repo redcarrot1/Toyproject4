@@ -32,11 +32,23 @@ public class Item {
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category")
+    @JoinColumn(name = "category_id")
     private Category category;
 
     public void setCategory(Category category){
         this.category = category;
         category.getItems().add(this);
+    }
+
+    public void setFileData(FileData fileData){
+        this.fileData=fileData;
+    }
+
+    public Item(String name, Integer price, Integer originPrice, String storeImageName, String description) {
+        this.name = name;
+        this.price = price;
+        this.originPrice = originPrice;
+        this.storeImageName = storeImageName;
+        this.description = description;
     }
 }

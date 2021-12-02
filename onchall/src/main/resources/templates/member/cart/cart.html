@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>cart</title>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th scope="col" style="width: 10%">no</th>
+        <th scope="col">상품명</th>
+        <th scope="col">가격</th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="cartItem : ${cart.cartItemDtoList}">
+        <th scope="row" th:text="${cartItemStat.index + 1}">1</th>
+        <td><a th:href="@{/itemDetail/{itemId}(itemId=${cartItem.itemId})}" th:text="${cartItem.itemName}"></a></td>
+        <td th:text="${cartItem.price}"></td>
+        <td><a th:href="@{/cart/delete/{itemId}(itemId=${cartItem.itemId})}">삭제하기</a></td>
+    </tr>
+    </tbody>
+</table>
+<h3>총계 [[${cart.totalPrice}]]</h3>
+<button type="button" onclick="location.href='board/all?page=0&sort=sequnce'">board</button>
+</body>
+</html>

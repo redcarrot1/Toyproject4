@@ -24,4 +24,14 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
     private Member member;
+
+    private Integer rating;
+
+    public Comment(String content, Item item, Member member, Integer rating) {
+        this.content = content;
+        this.item = item;
+        this.member = member;
+        this.rating = rating;
+        item.getComments().add(this);
+    }
 }

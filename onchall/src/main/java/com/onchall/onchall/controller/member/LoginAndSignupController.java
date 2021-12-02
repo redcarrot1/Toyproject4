@@ -75,15 +75,4 @@ public class LoginAndSignupController {
         model.addAttribute("loginForm", new LoginForm());
         return "member/login/login";
     }
-
-    /**
-     * 더미 데이터 멤버 추가
-     */
-    @GetMapping("/test/member")
-    public String testMember(Model model){
-        Member signupMember = memberService.signup("testMember", "asdf@asdf.com", "asdfasdf@");
-        memberService.changeMemberState(signupMember.getEmail());
-        model.addAttribute("loginForm", new LoginForm());
-        return "member/login/login";
-    }
 }

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>cart</title>
+</head>
+<body>
+<div th:object="${itemDetail}">
+    storeImageName: <span th:text="*{storeImageName}"></span>
+    <h1 th:text="*{name}"></h1>
+    <span th:text="*{description}"></span> <br>
+    <a th:href="@{/cart/add/{itemId}(itemId=*{itemId})}">장바구니</a> <br>
+    category: <a th:href="@{/}" th:text="*{categoryName}">카테고리이름</a>
+    <div>
+        설명
+        <span th:text="*{description}">설명</span>
+    </div>
+    <div>
+        댓글
+        <table>
+            <thead>
+            <tr>
+                <th scope="col" style="width: 10%">no</th>
+                <th scope="col">댓글작성자</th>
+                <th scope="col">별점</th>
+                <th scope="col">내용</th>
+            </tr>
+            </thead>
+            <span th:if="*{comments.size()==0}" th:text="|아직 댓글이 없습니다.|"></span>
+            <tbody>
+            <tr th:each="comment : *{comments}">
+                <th scope="row" th:text="${commentStat.index + 1}">1</th>
+                <td th:text="${comment.name}"></td>
+                <td th:text="${comment.rating}"></td>
+                <td th:text="${comment.content}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div>
+    연관상품
+    <table>
+        <thead>
+        <tr>
+            <th scope="col" style="width: 10%">no</th>
+            <th scope="col">이미지저장이름</th>
+            <th scope="col">제목</th>
+            <th scope="col">원래가격</th>
+            <th scope="col">판매가격</th>
+            <th scope="col">장바구니</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="relatedItem : ${relatedItems}">
+            <th scope="row" th:text="${relatedItemStat.index + 1}">1</th>
+            <td th:text="${relatedItem.storeImageName}"></td>
+            <td><a th:href="@{/itemDetail/{itemId}(itemId=${relatedItem.itemId})}" th:text="${relatedItem.name}"></a></td>
+            <td th:text="${relatedItem.originPrice}"></td>
+            <td th:text="${relatedItem.price}"></td>
+            <td><a th:href="@{/cart/add/{itemId}(itemId=${relatedItem.itemId})}">장바구니</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+</body>
+</html>

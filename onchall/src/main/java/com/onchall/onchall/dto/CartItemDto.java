@@ -5,10 +5,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class BoardItemDto {
-    String name;
-    String storeImageName;
-    Integer originPrice;
+public class CartItemDto {
+    String itemName;
     Integer price;
     Long itemId;
 }

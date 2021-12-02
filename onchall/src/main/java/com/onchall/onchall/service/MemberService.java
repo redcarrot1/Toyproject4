@@ -37,6 +37,15 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    public Member signupAdmin(String name, String email, String password){
+        Cart cart = new Cart();
+        cartRepository.save(cart);
+
+        Member member = new Member(name, email, passwordEncoder.encode(password), cart);
+        member.setState(MemberState.ADMIN);
+        return memberRepository.save(member);
+    }
+
     public void changeMemberState(String email){
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("email 이 존재하지 않습니다."));

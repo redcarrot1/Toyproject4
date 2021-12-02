@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>board</title>
+</head>
 <body>
-
 <table>
     <thead>
     <tr>
@@ -10,7 +13,7 @@
         <th scope="col">제목</th>
         <th scope="col">원래가격</th>
         <th scope="col">판매가격</th>
-
+        <th scope="col">장바구니</th>
     </tr>
     </thead>
 
@@ -18,9 +21,10 @@
     <tr th:each="item : ${pagination.itemList}">
         <th scope="row" th:text="${itemStat.index + 1}">1</th>
         <td th:text="${item.storeImageName}"></td>
-        <td th:text="${item.name}"></td>
+        <td><a th:href="@{/itemDetail/{itemId}(itemId=${item.itemId})}" th:text="${item.name}"></a></td>
         <td th:text="${item.originPrice}"></td>
         <td th:text="${item.price}"></td>
+        <td><a th:href="@{/cart/add/{itemId}(itemId=${item.itemId})}">장바구니</a></td>
     </tr>
     </tbody>
 </table>
@@ -28,28 +32,29 @@
 <nav th:object="${pagination}">
     <ul>
         <li>
-            <a th:href="@{/list?page=0}" th:unless="*{isFirst==true}">
+            <a th:href="@{/board/*{category}(page=0, sort=*{sort})}" th:unless="*{isFirst==true}">
                 <span>처음</span>
             </a>
         </li>
         <li>
-            <a th:href="@{/list(page = *{cntPage}-1)}" th:unless="*{isFirst==true}">
+            <a th:href="@{/board/*{category}(page= *{cntPage}-1, sort=*{sort})}" th:unless="*{isFirst==true}">
                 <span>이전</span>
             </a>
         </li>
 
         <li th:each="page: *{#numbers.sequence(start, end)}">
-            <a th:href="@{/list(page=${page})}" th:text="${page+1}"></a>
+            <a th:href="@{/board/*{category}(page=${page}, sort=*{sort})}" th:text="${page+1}"
+               th:if="${page}<*{totalPage}"></a>
         </li>
 
         <li>
-            <a th:href="@{/list(page = *{cntPage}+1)}" th:unless="*{isEnd==true}">
-                <span>이전</span>
+            <a th:href="@{/board/*{category}(page= *{cntPage}+1, sort=*{sort})}" th:unless="*{isEnd==true}">
+                <span>다음</span>
             </a>
         </li>
         <li>
-            <a th:href="@{/list(page=*{totalPage}-1)}" th:unless="*{isEnd==true}">
-                <span>처음</span>
+            <a th:href="@{/board/*{category}(page=*{totalPage}-1, sort=*{sort})}" th:unless="*{isEnd==true}">
+                <span>끝</span>
             </a>
         </li>
     </ul>
