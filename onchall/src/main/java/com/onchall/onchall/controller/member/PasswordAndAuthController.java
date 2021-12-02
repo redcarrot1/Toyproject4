@@ -1,5 +1,6 @@
 package com.onchall.onchall.controller.member;
 
+import com.onchall.onchall.argumentResolver.Login;
 import com.onchall.onchall.entity.Member;
 import com.onchall.onchall.form.ChangePasswordForm;
 import com.onchall.onchall.form.FindPasswordForm;
@@ -35,9 +36,17 @@ public class PasswordAndAuthController {
             bindingResult.reject("findMemberFail", "회원 정보가 없습니다.");
             return "member/password/findPassword";
         }
+        //TODO 이메일로 임시 비밀번호 전송
+        return "member/password/sendTemplePasswordComple";
+    }
 
+    @GetMapping("/changePassword")
+    public String changePasswordForm(@Login Member loginMember, Model model){
+        if (loginMember == null) { //세션에 없는 사용자.
+            return "redirect:/login";
+        }
         ChangePasswordForm changePasswordForm = new ChangePasswordForm();
-        changePasswordForm.setEmail(findMember.getEmail());
+        changePasswordForm.setEmail(loginMember.getEmail());
         model.addAttribute("changePasswordForm", changePasswordForm);
         return "member/password/changePassword";
     }
@@ -45,6 +54,6 @@ public class PasswordAndAuthController {
     @PostMapping("/changePassword")
     public String changePassword(@ModelAttribute ChangePasswordForm changePasswordForm){
         memberService.changeMemberPassword(changePasswordForm.getEmail(), changePasswordForm.getNewPassword());
-        return "member/password/changePasswordcomple";
+        return "member/password/changePasswordComple";
     }
 }

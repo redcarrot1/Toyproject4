@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<table>
+    <thead>
+    <tr>
+        <th scope="col" style="width: 10%">no</th>
+        <th scope="col">이미지저장이름</th>
+        <th scope="col">제목</th>
+        <th scope="col">원래가격</th>
+        <th scope="col">판매가격</th>
+
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="item : ${pagination.itemList}">
+        <th scope="row" th:text="${itemStat.index + 1}">1</th>
+        <td th:text="${item.storeImageName}"></td>
+        <td th:text="${item.name}"></td>
+        <td th:text="${item.originPrice}"></td>
+        <td th:text="${item.price}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<nav th:object="${pagination}">
+    <ul>
+        <li>
+            <a th:href="@{/list?page=0}" th:unless="*{isFirst==true}">
+                <span>처음</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/list(page = *{cntPage}-1)}" th:unless="*{isFirst==true}">
+                <span>이전</span>
+            </a>
+        </li>
+
+        <li th:each="page: *{#numbers.sequence(start, end)}">
+            <a th:href="@{/list(page=${page})}" th:text="${page+1}"></a>
+        </li>
+
+        <li>
+            <a th:href="@{/list(page = *{cntPage}+1)}" th:unless="*{isEnd==true}">
+                <span>이전</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/list(page=*{totalPage}-1)}" th:unless="*{isEnd==true}">
+                <span>처음</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+</body>
+</html>

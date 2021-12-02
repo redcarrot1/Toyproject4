@@ -20,4 +20,8 @@ public class Category {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> items = new ArrayList<>();
+
+    public void setName(String name) {
+        this.name=name;
+    }
 }

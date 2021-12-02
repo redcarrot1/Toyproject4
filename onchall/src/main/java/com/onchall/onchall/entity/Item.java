@@ -34,4 +34,9 @@ public class Item {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category")
     private Category category;
+
+    public void setCategory(Category category){
+        this.category = category;
+        category.getItems().add(this);
+    }
 }

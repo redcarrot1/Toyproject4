@@ -113,3 +113,52 @@ private RoleType roleType;
 member.setRoleType(RoleType.ADMIN) //db에 문자 ADMIN으로 저장됨
 ```
 
+
+
+
+
+
+
+
+
+### 스프링 데이터 jpa 페이징
+
+- 페이징을 위해 제공하는 반환 타입
+  - `org.springframework.data.domain.Page` : 추가 count 쿼리 결과를 포함하는 페이징 `org.springframework.data.domain.Slice` : 추가 count 쿼리 없이 다음 페이지만 확인 가능 (내부적으로 limit + 1조회)
+  - 여기서 page는 일반적으로 사용하는 게시판 페이지, slice는 모바일 등에서 아래로 스크롤하면 자동으로 다음 페이지를 가져오는 페이징이라 생각하면 된다.
+  - 특히 slice는 각 페이지의 게시물수+1 개를 가져와서 +1이 존재하면 자동 페이지 가져오기를 수행하는데, 이 또한 스프링데이터jpa에서 기능을 제공한다.
+- 사용할 메소드
+
+```java
+Page<Member> findByUsername(String name, Pageable pageable); //count 쿼리 사용
+Slice<Member> findByUsername(String name, Pageable pageable); //count 쿼리 사용
+안함
+```
+
+
+
+- 사용 예제(주의: 페이지는 0부터 시작이다.)
+
+```java
+//1. 먼저 repository에 page를 리턴하는 메소드가 필요함
+public interface MemberRepository extends Repository<Member, Long> {
+ Page<Member> findByAge(int age, Pageable pageable);
+}
+
+//2. 나이가 10살인 멤버들을 이름순으로 내림차순, 페이지당 보여줄 데이터는 3건, 첫페이지 원함
+PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC,
+"username"));
+ Page<Member> page = memberRepository.findByAge(10, pageRequest);
+
+List<Member> content = page.getContent(); //조회된 데이터
+assertThat(content.size()).isEqualTo(3); //조회된 데이터 수
+assertThat(page.getTotalElements()).isEqualTo(5); //전체 데이터 수
+assertThat(page.getNumber()).isEqualTo(0); //페이지 번호
+assertThat(page.getTotalPages()).isEqualTo(2); //전체 페이지 번호
+assertThat(page.isFirst()).isTrue(); //첫번째 항목인가?
+assertThat(page.hasNext()).isTrue(); //다음 페이지가 있는가?
+```
+
+
+
+- 전체 count 쿼리는 매우 무겁다. 따라서 데이터가 복잡할 때는 카운트 쿼리를 분리하는게 매우 중요하다.

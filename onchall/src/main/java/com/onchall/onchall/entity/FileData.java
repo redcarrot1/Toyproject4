@@ -1,5 +1,6 @@
 package com.onchall.onchall.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,9 +15,14 @@ import javax.persistence.Id;
 public class FileData {
     @Id
     @GeneratedValue
-    @Column(name="file_id")
+    @Column(name = "file_id")
     private Long id;
 
     private String uploadName;
     private String storeName;
+
+    public FileData(String uploadName, String storeName) {
+        this.uploadName = uploadName;
+        this.storeName = storeName;
+    }
 }
