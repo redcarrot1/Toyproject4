@@ -12,13 +12,27 @@
     <button type="button" onclick="location.href='/memberDetail/download'">다운로드</button>
     <button type="button" onclick="location.href='/memberDetail/point'">포인트내역</button>
     <button type="button" disabled>구매내역</button>
-
-    <th:block th:each="order : ${orderList}">
-        <span th:text="${order.repreItemName}" th:if="${order.orderItemCount == 0}"></span>
-        <span th:text="|${order.repreItemName} 외 ${order.orderItemCount}개|" th:unless="${order.orderItemCount == 1}"> </span>
-        <span th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}"></span>
-        <span th:text="${order.totalPrice}"></span>
-    </th:block>
 </div>
+
+<table>
+    <thead>
+    <tr>
+        <th scope="col" style="width: 10%">no</th>
+        <th scope="col">상품명</th>
+        <th scope="col">주문일자</th>
+        <th scope="col">총계</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="order : ${orderList}">
+        <th scope="row" th:text="${orderStat.index + 1}">1</th>
+        <td><a th:href="@{/orderDetail/{orderId}(orderId=${order.orderId})}" th:text="${order.repreItemName}" th:if="${order.orderItemCount == 0}"></a></td>
+        <td><a th:href="@{/orderDetail/{orderId}(orderId=${order.orderId})}" th:text="|${order.repreItemName} 외 ${order.orderItemCount}개|" th:unless="${order.orderItemCount == 1}"></a></td>
+        <td th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${order.totalPrice}"></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

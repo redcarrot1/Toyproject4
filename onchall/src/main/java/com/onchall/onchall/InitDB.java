@@ -37,6 +37,7 @@ public class InitDB {
         //initItem();
         //initItemFor20();
         initItemFor70();
+        initOrder();
     }
 
     public void initMember() {
@@ -135,22 +136,26 @@ public class InitDB {
 
     @Transactional
     public void initOrder(){
-        List<Item> items = itemRepository.findTop5All();
+        List<Item> items = itemRepository.findAll();
         List<OrderItem> orderItems = new ArrayList<>();
         Member testMember1 = memberService.findMemberNameAndEmail("testMember1", "asdf@asdf.com");
 
         Order order = new Order();
         order.setOrderDate(LocalDateTime.now());
         order.setOrderItems(orderItems);
-        order.setOrderItemCount(items.size());
+        order.setOrderItemCount(5);
         order.setRepreItemName(items.get(0).getName());
         order.setMember(testMember1);
         Integer totalPrice=0;
         order.setTotalPrice(totalPrice);
+        order.setUsePoint(3000);
+        order.setPayMethod(PayMethod.Card);
 
         Order saveOrder = orderRepository.save(order);
 
-        for(Item e:items){
+        for(int i=0; i<5; i++){
+            Item e = items.get(i);
+
             OrderItem orderItem = new OrderItem();
             orderItem.setItemId(e.getId());
             orderItem.setItemName(e.getName());

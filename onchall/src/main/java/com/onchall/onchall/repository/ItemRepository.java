@@ -13,5 +13,4 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findFirst5ByCategory(Category category);
 
-    List<Item> findTop5All();
 }

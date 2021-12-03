@@ -78,7 +78,7 @@ public class MemberDetailController {
         List<OrderSimple> orderSimpleList = new ArrayList<>();
         List<Order> orders = memberService.getOrder(loginMember.getId());
         orders.forEach(e ->
-                orderSimpleList.add(new OrderSimple(e.getRepreItemName(), e.getOrderItemCount() - 1, e.getOrderDate(), e.getTotalPrice())));
+                orderSimpleList.add(new OrderSimple(e.getId(), e.getRepreItemName(), e.getOrderItemCount() - 1, e.getOrderDate(), e.getTotalPrice())));
 
         //로그인된 회원
         model.addAttribute("member",

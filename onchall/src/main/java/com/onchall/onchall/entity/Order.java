@@ -32,4 +32,8 @@ public class Order {
     private String repreItemName;
     private Integer orderItemCount;
     private Integer totalPrice;
+    private Integer usePoint;
+
+    @Enumerated(EnumType.STRING)
+    private PayMethod payMethod;
 }
