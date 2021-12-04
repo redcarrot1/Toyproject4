@@ -17,4 +17,10 @@ public class OrderItemService {
     public List<OrderItem> findOrderItemsByOrderId(Long orderId){
         return orderItemRepository.findByOrderId(orderId);
     }
+
+    public void setIsCommentTrue(Long orderItemId) {
+        OrderItem orderItem = orderItemRepository.findById(orderItemId).get();
+        orderItem.setComment(true);
+        orderItemRepository.save(orderItem);
+    }
 }

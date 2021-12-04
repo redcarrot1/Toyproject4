@@ -7,6 +7,7 @@ import com.onchall.onchall.entity.Member;
 import com.onchall.onchall.form.CommentForm;
 import com.onchall.onchall.service.CommentService;
 import com.onchall.onchall.service.ItemService;
+import com.onchall.onchall.service.OrderItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -21,23 +22,27 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Slf4j
 public class CommentController {
     private final CommentService commentService;
+    private final OrderItemService orderItemService;
     private final ItemService itemService;
 
-    @PostMapping("/comment/add/{itemId}")
+    @PostMapping("/comment/add/{itemId}/{orderItemId}")
     //@ResponseBody
-    public String addComment(@Login Member loginMember, @PathVariable Long itemId, @ModelAttribute CommentForm commentForm) {
+    public String addComment(@Login Member loginMember, @PathVariable Long itemId,
+                             @PathVariable Long orderItemId, @ModelAttribute CommentForm commentForm) {
         Item item = itemService.findById(itemId);
         Comment comment = new Comment(commentForm.getContent(), item, loginMember, commentForm.getRating());
         commentService.save(comment);
+        orderItemService.setIsCommentTrue(orderItemId);
         //todo 성공실패 리턴
         return "redirect:/memberDetail/order";
     }
 
-    @GetMapping("/comment/add/{itemId}")
-    public String addCommentForm(@PathVariable Long itemId, Model model) {
+    @GetMapping("/comment/add/{itemId}/{orderItemId}")
+    public String addCommentForm(@PathVariable Long itemId, @PathVariable Long orderItemId, Model model) {
         //todo 아이템이 아직도 존재하는가 검사
         model.addAttribute("commentForm", new CommentForm());
         model.addAttribute("itemId", itemId);
+        model.addAttribute("orderItemId", orderItemId);
         return "comment/commentAdd";
     }
 }

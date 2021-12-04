@@ -7,13 +7,12 @@
 <body>
 <div th:object="${orderDetail}">
   <div>
-    <span th:text="|주문번호: *{orderId}|"></span>
-    <span th:text="|주문날짜: *{#temporals.format(orderDate, 'yyyy-MM-dd HH:mm')}|"></span>
+    <span th:text="|주문번호: *{orderId}|"></span><br>
+    <span th:text="|주문날짜: *{#temporals.format(orderDate, 'yyyy-MM-dd HH:mm')}|"></span><br>
   </div>
   <table>
     <thead>
     <tr>
-      <th scope="col" style="width: 10%">no</th>
       <th scope="col">상품주문번호</th>
       <th scope="col">상품정보</th>
       <th scope="col">금액</th>
@@ -23,19 +22,18 @@
 
     <tbody>
     <tr th:each="orderItem : *{orderItemDetails}">
-      <th scope="row" th:text="${orderItemStat.index + 1}">1</th>
       <td th:text="${orderItem.orderItemId}"></td>
       <td><a th:href="@{/itemDetail/{itemId}(itemId=${orderItem.itemId})}" th:text="${orderItem.name}"></a></td>
       <td th:text="${orderItem.price}"></td>
-      <td th:if="${orderItem.isComment==false}"><a th:href="@{/comment/add/{itemId}(itemId=${orderItem.itemId})}">리뷰쓰기</a></td>
+      <td th:if="${orderItem.isComment==false}"><a th:href="@{/comment/add/{itemId}/{orderItemId}(itemId=${orderItem.itemId}, orderItemId=${orderItem.orderItemId})}">리뷰쓰기</a></td>
     </tr>
     </tbody>
   </table>
   <div>
-    <span th:text="|총 가격: *{totalPrice}|"></span>
-    <span th:text="|포인트 사용: *{usePoint}|"></span>
-    <span th:text="'결제금액: ' + *{totalPrice}-*{usePoint}"></span>
-    <span th:text="|결제방법: *{payMethod}|"></span>
+    <span th:text="|총 가격: *{totalPrice}|"></span><br>
+    <span th:text="|포인트 사용: *{usePoint}|"></span><br>
+    <span th:text="|결제금액: *{payPrice}|"></span><br>
+    <span th:text="|결제방법: *{payMethod}|"></span><br>
   </div>
 </div>
 </body>

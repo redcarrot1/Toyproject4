@@ -27,7 +27,7 @@ public class OrderDetailController {
         Order order = orderService.findById(orderId);
         List<OrderItemDetail> orderItemDetails =
                 orderItemService.findOrderItemsByOrderId(orderId).stream()
-                .map(e -> new OrderItemDetail(e.getItemId(), e.getItemId(), e.getItemName(), e.getPrice(), e.isComment()))
+                .map(e -> new OrderItemDetail(e.getId(), e.getItemId(), e.getItemName(), e.getPrice(), e.isComment()))
                 .collect(Collectors.toList());
         OrderDetail orderDetail = new OrderDetail(order.getId(), order.getOrderDate(), order.getUsePoint(),
                 order.getTotalPrice(), order.getPayMethod().toString(), orderItemDetails);

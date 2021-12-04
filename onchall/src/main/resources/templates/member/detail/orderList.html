@@ -12,6 +12,7 @@
     <button type="button" onclick="location.href='/memberDetail/download'">다운로드</button>
     <button type="button" onclick="location.href='/memberDetail/point'">포인트내역</button>
     <button type="button" disabled>구매내역</button>
+    <button type="button" onclick="location.href='/cart'">장바구니</button>
 </div>
 
 <table>
@@ -27,7 +28,7 @@
     <tbody>
     <tr th:each="order : ${orderList}">
         <th scope="row" th:text="${orderStat.index + 1}">1</th>
-        <td><a th:href="@{/orderDetail/{orderId}(orderId=${order.orderId})}" th:text="${order.repreItemName}" th:if="${order.orderItemCount == 0}"></a></td>
+        <td th:if="${order.orderItemCount == 0}"><a th:href="@{/orderDetail/{orderId}(orderId=${order.orderId})}" th:text="${order.repreItemName}"></a></td>
         <td><a th:href="@{/orderDetail/{orderId}(orderId=${order.orderId})}" th:text="|${order.repreItemName} 외 ${order.orderItemCount}개|" th:unless="${order.orderItemCount == 1}"></a></td>
         <td th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}"></td>
         <td th:text="${order.totalPrice}"></td>

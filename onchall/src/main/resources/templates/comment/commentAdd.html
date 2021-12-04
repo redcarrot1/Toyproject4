@@ -5,7 +5,7 @@
     <title>comment</title>
 </head>
 <body>
-<form method="post" th:action="@{/comment/add/{itemId} (itemId=${itemId})}" th:object="${commentForm}">
+<form method="post" th:action="@{/comment/add/{itemId}/{orderItemId} (itemId=${itemId}, orderItemId=${orderItemId})}" th:object="${commentForm}">
     <p>rating: <input type="number" min="1" max="5" th:field="*{rating}"/></p>
     <p>content: <input type="text" th:field="*{content}"/></p>
     <button>댓글쓰기</button>

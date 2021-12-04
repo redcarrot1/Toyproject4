@@ -12,6 +12,7 @@
     <button type="button" disabled>다운로드</button>
     <button type="button" onclick="location.href='/memberDetail/point'">포인트내역</button>
     <button type="button" onclick="location.href='/memberDetail/order'">구매내역</button>
+    <button type="button" onclick="location.href='/cart'">장바구니</button>
 
     <th:block th:each="download : ${downloadList}">
         <span th:text="${download.itemName}"></span>

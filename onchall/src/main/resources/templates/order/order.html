@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>order</title>
+</head>
+<body>
+<h1>주문하기</h1>
+<table>
+    <thead>
+    <tr>
+        <th scope="col" style="width: 10%">no</th>
+        <th scope="col">상품명</th>
+        <th scope="col">가격</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="orderItem : ${orderForm.orderItemFormList}">
+        <th scope="row" th:text="${orderItemStat.index + 1}">1</th>
+        <td><a th:href="@{/itemDetail/{itemId}(itemId=${orderItem.itemId})}" th:text="${orderItem.itemName}"></a></td>
+        <td th:text="${orderItem.itemPrice}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<div>
+    <h3>주문자 정보</h3>
+    <span th:text="${orderForm.memberName}"></span><br>
+    <span th:text="${orderForm.memberEmail}"></span><br>
+</div>
+
+<form method="post" action="order">
+    <div>
+        <h3>포인트</h3>
+        <span th:text="|보유: ${orderForm.memberPoint}|"></span><br>
+        사용: <input type="number" th:field="${orderForm.usePoint}"/><br>
+    </div>
+    <div>
+        <h3>결제수단</h3>
+        <input type="radio" th:field="${orderForm.payMethod}" value="Card" checked>카드
+        <input type="radio" th:field="${orderForm.payMethod}" value="BankBook">계좌 입금
+    </div>
+    <div>
+        <span th:text="|주문금액: ${orderForm.totalOrderPrice}|"></span><br>
+        <span>포인트사용: [js로 처리]</span><br>
+        <span>실결제: [js로 처리]</span><br>
+    </div>
+
+    <button>결제하기</button>
+</form>
+
+</body>
+</html>
