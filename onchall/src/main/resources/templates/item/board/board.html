@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+
+<head th:replace="~{fragment/header :: common_header_ts(~{::title}, ~{::style})}">
     <title>board</title>
+    <style>
+        th, td {
+            text-align: center;
+        }
+    </style>
 </head>
+
 <body>
+<div th:replace="~{fragment/navBar :: nav}"></div>
+<div>
+    카테고리
+    <th:block th:each="categoryName : ${categoryNameList}">
+        <a th:href="@{/board/{category}(category=${categoryName}, page=0, sort=${pagination.sort})}"
+           th:text="${categoryName}"></a>
+    </th:block>
+</div>
+
 <table>
     <thead>
     <tr>
@@ -19,7 +34,7 @@
 
     <tbody>
     <tr th:each="item : ${pagination.itemList}">
-        <th scope="row" th:text="${itemStat.index + 1}">1</th>
+        <th scope="row" th:text="${pagination.cntPage*12 + itemStat.index + 1}">1</th>
         <td th:text="${item.storeImageName}"></td>
         <td><a th:href="@{/itemDetail/{itemId}(itemId=${item.itemId})}" th:text="${item.name}"></a></td>
         <td th:text="${item.originPrice}"></td>
@@ -30,31 +45,35 @@
 </table>
 
 <nav th:object="${pagination}">
-    <ul>
-        <li>
-            <a th:href="@{/board/*{category}(page=0, sort=*{sort})}" th:unless="*{isFirst==true}">
-                <span>처음</span>
+    <ul class="pagination">
+        <li class="page-item">
+            <a th:href="@{/board/{category}(category=*{category},page=0, sort=*{sort})}" th:unless="*{isFirst==true}"
+               class="page-link">
+                처음
             </a>
         </li>
-        <li>
-            <a th:href="@{/board/*{category}(page= *{cntPage}-1, sort=*{sort})}" th:unless="*{isFirst==true}">
-                <span>이전</span>
+        <li class="page-item">
+            <a th:href="@{/board/{category}(category=*{category},page= *{cntPage}-1, sort=*{sort})}"
+               th:unless="*{isFirst==true}" class="page-link">
+                이전
             </a>
         </li>
 
-        <li th:each="page: *{#numbers.sequence(start, end)}">
-            <a th:href="@{/board/*{category}(page=${page}, sort=*{sort})}" th:text="${page+1}"
-               th:if="${page}<*{totalPage}"></a>
+        <li th:each="page: *{#numbers.sequence(start, end)}" class="page-item">
+            <a th:href="@{/board/{category}(category=*{category},page=${page}, sort=*{sort})}" th:text="${page+1}"
+               th:if="${page}<*{totalPage}" class="page-link"></a>
         </li>
 
-        <li>
-            <a th:href="@{/board/*{category}(page= *{cntPage}+1, sort=*{sort})}" th:unless="*{isEnd==true}">
-                <span>다음</span>
+        <li class="page-item">
+            <a th:href="@{/board/{category}(category=*{category}, page= *{cntPage}+1, sort=*{sort})}"
+               th:unless="*{isEnd==true}" class="page-link">
+                다음
             </a>
         </li>
-        <li>
-            <a th:href="@{/board/*{category}(page=*{totalPage}-1, sort=*{sort})}" th:unless="*{isEnd==true}">
-                <span>끝</span>
+        <li class="page-item">
+            <a th:href="@{/board/{category}(category=*{category},page=*{totalPage}-1, sort=*{sort})}"
+               th:unless="*{isEnd==true}" class="page-link">
+                끝
             </a>
         </li>
     </ul>

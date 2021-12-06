@@ -43,7 +43,11 @@ public class CartController {
     @GetMapping("/cart/add/{itemId}")
     //@ResponseBody
     public String addItemInCart(@Login Member loginMember, @PathVariable Long itemId){
-        cartService.addItem(loginMember.getId(), itemId);
+        try{
+            cartService.addItem(loginMember.getId(), itemId);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         //todo json 형식으로 성공여부 리턴.
         //return "true";
         //return "false";

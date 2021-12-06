@@ -27,6 +27,9 @@ public class CartService {
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 회원이 없습니다."));
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 아이템이 없습니다."));
+        if(cartItemRepository.findByCartAndItem(member.getCart(), item).isPresent()){
+            throw new IllegalArgumentException("이미 장바구니에 있는 상품입니다.");
+        }
 
         CartItem cartItem = new CartItem();
         cartItem.setCart(member.getCart());

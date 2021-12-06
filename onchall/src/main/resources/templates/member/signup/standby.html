@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>stanby</title>
+<head th:replace="~{fragment/header :: common_header_t(~{::title})}">
+    <title>signupStandby</title>
 </head>
+
 <body>
+<div th:replace="~{fragment/navBar :: nav}"></div>
 <div>
     <h1>인증 이메일이 전송되었습니다.</h1>
     <h1>회원가입을 완료하시려면 '인증하기' 버튼을 눌러주세요.</h1>

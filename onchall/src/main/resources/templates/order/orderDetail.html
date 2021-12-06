@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
+<head th:replace="~{fragment/header :: common_header_ts(~{::title}, ~{::style})}">
   <title>orderDetail</title>
+  <style>
+    th, td {
+      text-align: center;
+    }
+  </style>
 </head>
+
 <body>
+<div th:replace="~{fragment/navBar :: nav}"></div>
 <div th:object="${orderDetail}">
   <div>
     <span th:text="|주문번호: *{orderId}|"></span><br>

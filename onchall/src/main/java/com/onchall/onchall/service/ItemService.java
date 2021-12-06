@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,11 +25,13 @@ import java.util.stream.Collectors;
 public class ItemService {
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
-    public Pagination sortByCategoryAndPage(String sort, String category, Integer pageNumber) {
+    public Pagination sortByCategoryAndPage(String sort, String categoryName, Integer pageNumber) {
         PageRequest pageRequest = PageRequest.of(pageNumber, 12);
         //PageRequest pageRequest = PageRequest.of(page, 12, Sort.by(Sort.Direction.DESC, "username"));
-        Page<Item> page = itemRepository.findAll(pageRequest);
-        //Page<Item> page = itemRepository.findByAge(10, pageRequest);
+
+        Page<Item> page;
+        if(categoryName.equals("all")) page = itemRepository.findAll(pageRequest);
+        else page = itemRepository.findByCategory(categoryRepository.findByName(categoryName).get(), pageRequest);
         List<Item> content = page.getContent(); //조회된 데이터
         List<BoardItemDto> itemList = new ArrayList<>();
         content.forEach(e -> {
@@ -41,7 +44,7 @@ public class ItemService {
         boolean isEnd = !page.hasNext();
         Integer totalPageNumber = page.getTotalPages();
 
-        Pagination pagination = new Pagination(start, end, isFirst, isEnd, pageNumber, totalPageNumber, category, sort, itemList);
+        Pagination pagination = new Pagination(start, end, isFirst, isEnd, pageNumber, totalPageNumber, categoryName, sort, itemList);
         return pagination;
     }
 

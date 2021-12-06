@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>cart</title>
+<head th:replace="~{fragment/header :: common_header_ts(~{::title}, ~{::style})}">
+    <title>itemDetail</title>
+    <style>
+        th, td {
+            text-align: center;
+        }
+    </style>
 </head>
+
 <body>
+<div th:replace="~{fragment/navBar :: nav}"></div>
+
 <div th:object="${itemDetail}">
     storeImageName: <span th:text="*{storeImageName}"></span>
     <h1 th:text="*{name}"></h1>
     <span th:text="*{description}"></span> <br>
     <a th:href="@{/cart/add/{itemId}(itemId=*{itemId})}">장바구니</a> <br>
-    category: <a th:href="@{/}" th:text="*{categoryName}">카테고리이름</a>
+    category: <a th:href="@{/board/{category}(category=*{categoryName}, page=0, sort='변경필요')}" th:text="*{categoryName}">카테고리이름</a>
     <div>
         설명
         <span th:text="*{description}">설명</span>
@@ -43,7 +50,6 @@
     <table>
         <thead>
         <tr>
-            <th scope="col" style="width: 10%">no</th>
             <th scope="col">이미지저장이름</th>
             <th scope="col">제목</th>
             <th scope="col">원래가격</th>
@@ -54,7 +60,6 @@
 
         <tbody>
         <tr th:each="relatedItem : ${relatedItems}">
-            <th scope="row" th:text="${relatedItemStat.index + 1}">1</th>
             <td th:text="${relatedItem.storeImageName}"></td>
             <td><a th:href="@{/itemDetail/{itemId}(itemId=${relatedItem.itemId})}" th:text="${relatedItem.name}"></a></td>
             <td th:text="${relatedItem.originPrice}"></td>

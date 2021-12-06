@@ -31,10 +31,11 @@ public class OrderService {
     }
 
     public Order addOrder(Member member, Integer usePoint, String payMethod) {
-
-        List<CartItem> cartItems = cartItemRepository.findByCartId(member.getCart().getId());
+        Cart cart = member.getCart();
+        List<CartItem> cartItems = cartItemRepository.findByCartId(cart.getId());
         List<Item> items = cartItems.stream().map(CartItem::getItem).collect(Collectors.toList());
         List<OrderItem> orderItems = new ArrayList<>();
+        Integer totalPrice = 0;
 
         Order order = new Order();
         order.setOrderDate(LocalDateTime.now());
@@ -42,9 +43,6 @@ public class OrderService {
         order.setOrderItemCount(cartItems.size());
         order.setRepreItemName(items.get(0).getName());
         order.setMember(member);
-
-        Integer totalPrice = 0;
-        order.setTotalPrice(totalPrice);
         order.setUsePoint(usePoint);
         if (payMethod.equals("Card")) order.setPayMethod(PayMethod.Card);
         else order.setPayMethod(PayMethod.BankBook);
@@ -63,13 +61,13 @@ public class OrderService {
             OrderItem saveOrderItem = orderItemRepository.save(orderItem);
             saveOrder.getOrderItems().add(saveOrderItem);
         }
-        ;
+
         saveOrder.setTotalPrice(totalPrice);
 
         for(CartItem cartItem:cartItems){
             cartItemRepository.delete(cartItem);
-            member.getCart().getCartItems().clear(); //LazyInitializationException!!
         }
+        cartItems.clear();
 
         return saveOrder;
     }

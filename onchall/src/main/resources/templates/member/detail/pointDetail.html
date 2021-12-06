@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>pointList</title>
+<head th:replace="~{fragment/header :: common_header_t(~{::title})}">
+    <title>downloadList</title>
 </head>
+
 <body>
+<div th:replace="~{fragment/navBar :: nav}"></div>
 <div th:object="${member}">
     <h1>[[*{name}]]님 환영합니다.</h1>
     email: <span th:text="*{email}">email</span><br>

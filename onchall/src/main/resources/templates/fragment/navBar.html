@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+
+<th:block th:fragment="nav_bar">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="/home">ONCHALL</a>
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-toggle="collapse"
+                data-target="#collapsibleNavbar"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">온챌아카데미학원</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">온챌개념서 무료보기</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/board/all?page=0&sort=아무말">온챌개념서 구매</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cart">장바구니</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/memberDetail/download">회원정보</a>
+                </li>
+                <!--수정필요
+                  <li class="nav-item">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-bs-toggle="dropdown" aria-expanded="false">js 수정필요</a>
+                      <ul class="dropdown-menu" aria-labelledby="dropdown04">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                      </ul>
+                  </li>
+                -->
+            </ul>
+        </div>
+    </nav>
+</th:block>
+</body>
+</html>

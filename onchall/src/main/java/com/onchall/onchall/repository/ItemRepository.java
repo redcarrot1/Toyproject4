@@ -13,4 +13,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findFirst5ByCategory(Category category);
 
+    Page<Item> findByCategory(Category category, Pageable pageable);
+
 }

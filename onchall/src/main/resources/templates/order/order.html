@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+<head th:replace="~{fragment/header :: common_header_ts(~{::title}, ~{::style})}">
     <title>order</title>
+    <style>
+        th, td {
+            text-align: center;
+        }
+    </style>
 </head>
+
 <body>
+<div th:replace="~{fragment/navBar :: nav}"></div>
 <h1>주문하기</h1>
 <table>
     <thead>

@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+<head th:replace="~{fragment/header :: common_header_ts(~{::title}, ~{::style})}">
     <title>orderList</title>
+    <style>
+        th, td {
+            text-align: center;
+        }
+    </style>
 </head>
+
 <body>
+<div th:replace="~{fragment/navBar :: nav}"></div>
 <div th:object="${member}">
     <h1>[[*{name}]]님 환영합니다.</h1>
     email: <span th:text="*{email}">email</span><br>
