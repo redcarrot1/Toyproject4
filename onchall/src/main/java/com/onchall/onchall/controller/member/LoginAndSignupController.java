@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 
 
 @Slf4j
@@ -38,6 +39,10 @@ public class LoginAndSignupController {
     @PostMapping("/login")
     public String login(@Validated @ModelAttribute LoginForm loginForm, BindingResult bindingResult,
                         HttpServletRequest request, Model model) {
+        if (bindingResult.hasErrors()) {
+            log.warn("로그인 실패. errors={}", bindingResult);
+            return "member/login/login";
+        }
         Member loginMember = null;
         try {
             loginMember = memberService.login(loginForm.getEmail(), loginForm.getPassword());
@@ -45,7 +50,6 @@ public class LoginAndSignupController {
             e.printStackTrace();
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
         }
-
         if (bindingResult.hasErrors()) {
             log.warn("로그인 실패. errors={}", bindingResult);
             return "member/login/login";
@@ -57,19 +61,33 @@ public class LoginAndSignupController {
     }
 
     @GetMapping("/signup")
-    public String signupForm(Model model){
+    public String signupForm(Model model) {
         model.addAttribute("signupForm", new SignupForm());
         return "member/signup/signup";
     }
 
     @PostMapping("/signup")
-    public String signup(@Validated @ModelAttribute SignupForm signupForm, BindingResult bindingResult){
+    public String signup(@Validated @ModelAttribute SignupForm signupForm, BindingResult bindingResult) {
+        if (memberService.isDuplication(signupForm.getEmail())) {
+            bindingResult.reject("emailDuplication", "회원 email 이 중복되었습니다.");
+        }
+        if (bindingResult.hasErrors()) {
+            log.warn("회원가입 실패. errors={}", bindingResult);
+            return "member/signup/signup";
+        }
+
         Member signupMember = memberService.signup(signupForm.getName(), signupForm.getEmail(), signupForm.getPassword());
         return "member/signup/standby";
     }
 
+    @PostMapping("/email/duplication")
+    @ResponseBody
+    public boolean duplication(@RequestBody HashMap<String, String> map) {
+        return !memberService.isDuplication(map.get("email"));
+    }
+
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request, Model model){
+    public String logout(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession(false);
         if (session != null) session.invalidate();
         model.addAttribute("loginForm", new LoginForm());

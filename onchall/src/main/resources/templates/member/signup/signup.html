@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <head th:replace="~{fragment/header :: common_header_t(~{::title})}">
     <title>signup</title>
 </head>
@@ -10,9 +11,29 @@
     <form method="post" action="signup" th:object="${signupForm}">
         <p>name: <input type="text" th:field="*{name}"/></p>
         <p>email: <input type="email" th:field="*{email}"/></p>
+        <button type="button" onclick="isDuplication()">중복체크</button>
         <p>password: <input type="password" th:field="*{password}"/></p>
         <button>signup</button>
     </form>
 </div>
+
+<script>
+    function isDuplication() {
+        console.log("실행");
+        axios.post('/email/duplication',
+            {
+                email: document.getElementById('email').value
+            }
+        )
+            .then(function (response) {
+
+                console.log(response.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+</script>
 </body>
 </html>

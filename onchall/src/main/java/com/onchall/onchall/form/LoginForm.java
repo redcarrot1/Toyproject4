@@ -12,6 +12,6 @@ import javax.validation.constraints.Size;
 public class LoginForm {
     @Email @NotBlank
     String email;
-    @Size(min=6, max=20)
+    @NotBlank(message = "비밀번호는 6자 이상입니다.")
     String password;
 }

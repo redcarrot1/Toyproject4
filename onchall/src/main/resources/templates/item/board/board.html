@@ -46,33 +46,33 @@
 
 <nav th:object="${pagination}">
     <ul class="pagination">
-        <li class="page-item">
-            <a th:href="@{/board/{category}(category=*{category},page=0, sort=*{sort})}" th:unless="*{isFirst==true}"
+        <li class="page-item" th:classappend="*{isFirst} ? 'disabled'">
+            <a th:href="@{/board/{category}(category=*{category},page=0, sort=*{sort})}"
                class="page-link">
                 처음
             </a>
         </li>
-        <li class="page-item">
+        <li class="page-item" th:classappend="*{isFirst} ? 'disabled'">
             <a th:href="@{/board/{category}(category=*{category},page= *{cntPage}-1, sort=*{sort})}"
-               th:unless="*{isFirst==true}" class="page-link">
+               class="page-link">
                 이전
             </a>
         </li>
 
-        <li th:each="page: *{#numbers.sequence(start, end)}" class="page-item">
+        <li th:each="page: *{#numbers.sequence(start, end)}" class="page-item" th:classappend="${pagination.cntPage==page} ? 'active'">
             <a th:href="@{/board/{category}(category=*{category},page=${page}, sort=*{sort})}" th:text="${page+1}"
                th:if="${page}<*{totalPage}" class="page-link"></a>
         </li>
 
-        <li class="page-item">
+        <li class="page-item" th:classappend="*{isEnd} ? 'disabled'">
             <a th:href="@{/board/{category}(category=*{category}, page= *{cntPage}+1, sort=*{sort})}"
-               th:unless="*{isEnd==true}" class="page-link">
+                class="page-link">
                 다음
             </a>
         </li>
-        <li class="page-item">
+        <li class="page-item" th:classappend="*{isEnd} ? 'disabled'">
             <a th:href="@{/board/{category}(category=*{category},page=*{totalPage}-1, sort=*{sort})}"
-               th:unless="*{isEnd==true}" class="page-link">
+               class="page-link">
                 끝
             </a>
         </li>
