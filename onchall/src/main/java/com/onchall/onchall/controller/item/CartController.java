@@ -3,6 +3,7 @@ package com.onchall.onchall.controller.item;
 import com.onchall.onchall.argumentResolver.Login;
 import com.onchall.onchall.dto.CartDto;
 import com.onchall.onchall.dto.CartItemDto;
+import com.onchall.onchall.dto.MemberDetail;
 import com.onchall.onchall.entity.CartItem;
 import com.onchall.onchall.entity.Item;
 import com.onchall.onchall.entity.Member;
@@ -37,6 +38,8 @@ public class CartController {
         }
         CartDto cartDto = new CartDto(cartItemDtoList, totalPrice);
         model.addAttribute("cart", cartDto);
+        model.addAttribute("member", new MemberDetail
+                (loginMember.getName(), loginMember.getEmail(), loginMember.getPoint()));
         return "member/cart/cart";
     }
 

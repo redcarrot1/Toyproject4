@@ -11,49 +11,57 @@
 
 <body>
 <div th:replace="~{fragment/navBar :: nav}"></div>
-<h1>주문하기</h1>
-<table>
-    <thead>
-    <tr>
-        <th scope="col" style="width: 10%">no</th>
-        <th scope="col">상품명</th>
-        <th scope="col">가격</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="orderItem : ${orderForm.orderItemFormList}">
-        <th scope="row" th:text="${orderItemStat.index + 1}">1</th>
-        <td><a th:href="@{/itemDetail/{itemId}(itemId=${orderItem.itemId})}" th:text="${orderItem.itemName}"></a></td>
-        <td th:text="${orderItem.itemPrice}"></td>
-    </tr>
-    </tbody>
-</table>
+<div class="container pt-4">
+    <h1>주문하기</h1>
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th scope="col" style="width: 10%">no</th>
+            <th scope="col">상품명</th>
+            <th scope="col">가격</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="orderItem : ${orderForm.orderItemFormList}">
+            <th scope="row" th:text="${orderItemStat.index + 1}">1</th>
+            <td><a th:href="@{/itemDetail/{itemId}(itemId=${orderItem.itemId})}" th:text="${orderItem.itemName}"></a>
+            </td>
+            <td th:text="${orderItem.itemPrice}"></td>
+        </tr>
+        </tbody>
+    </table>
 
-<div>
-    <h3>주문자 정보</h3>
-    <span th:text="${orderForm.memberName}"></span><br>
-    <span th:text="${orderForm.memberEmail}"></span><br>
+    <form method="post" action="order">
+        <div class="row">
+            <div class="col-6">
+                <h3>주문자 정보</h3>
+                <span th:text="${orderForm.memberName}"></span><br>
+                <span th:text="${orderForm.memberEmail}"></span><br>
+            </div>
+            <div class="col-6">
+                <h3>포인트</h3>
+                <span th:text="|보유: ${orderForm.memberPoint}|"></span><br>
+                사용: <input type="number" th:field="${orderForm.usePoint}"/><br>
+            </div>
+        </div>
+        <br><br>
+
+        <div class="row">
+            <div class="col-6">
+                <h3>결제수단</h3>
+                <input type="radio" th:field="${orderForm.payMethod}" value="Card" checked>카드
+                <input type="radio" th:field="${orderForm.payMethod}" value="BankBook">계좌 입금
+            </div>
+            <div class="col-6">
+                <h3 th:text="|주문금액: ${orderForm.totalOrderPrice}|"></h3>
+                <h3>포인트사용: [js로 처리]</h3>
+                <h3>실결제: [js로 처리]</h3>
+            </div>
+        </div>
+        <div class="text-center">
+            <button class="btn btn-primary">결제하기</button>
+        </div>
+    </form>
 </div>
-
-<form method="post" action="order">
-    <div>
-        <h3>포인트</h3>
-        <span th:text="|보유: ${orderForm.memberPoint}|"></span><br>
-        사용: <input type="number" th:field="${orderForm.usePoint}"/><br>
-    </div>
-    <div>
-        <h3>결제수단</h3>
-        <input type="radio" th:field="${orderForm.payMethod}" value="Card" checked>카드
-        <input type="radio" th:field="${orderForm.payMethod}" value="BankBook">계좌 입금
-    </div>
-    <div>
-        <span th:text="|주문금액: ${orderForm.totalOrderPrice}|"></span><br>
-        <span>포인트사용: [js로 처리]</span><br>
-        <span>실결제: [js로 처리]</span><br>
-    </div>
-
-    <button>결제하기</button>
-</form>
-
 </body>
 </html>

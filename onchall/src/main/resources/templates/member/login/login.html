@@ -9,10 +9,11 @@
 <div class="container pt-5">
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
     <form method="post" action="login" th:object="${loginForm}">
+
         <div class="container-md pt-3">
             <label for="inputEmail" class="visually-hidden">Email</label>
-            <input type="email" id="inputEmail" th:field="*{email}" class="form-control-lg"
-                   th:errorclass="field-error" placeholder="Email">
+            <input type="email" id="inputEmail" class="form-control-lg" th:field="*{email}"
+                   placeholder="email" th:errorclass="field-error">
             <div class="field-error" th:errors="*{email}" style="color: red;"/>
         </div>
 
@@ -26,7 +27,7 @@
             <p class="field-error" th:each="err : ${#fields.globalErrors()}"
                th:text="${err}" style="color: red;">전체 오류 메시지</p>
         </div>
-<br>
+        <br>
         <button class="btn btn-lg btn-primary btn-block" type="submit">login</button>
     </form>
 

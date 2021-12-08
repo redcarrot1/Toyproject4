@@ -11,28 +11,53 @@
 
 <body>
 <div th:replace="~{fragment/navBar :: nav}"></div>
+<div th:object="${member}" class="container pt-4">
+    <h1 class="text-center">[[*{name}]]님 환영합니다.</h1>
+    <div class="col p-4">
+        email: <span th:text="*{email}">email</span><br>
+        point: <span th:text="*{point}">point</span>
+    </div>
 
-<table>
-    <thead>
-    <tr>
-        <th scope="col" style="width: 10%">no</th>
-        <th scope="col">상품명</th>
-        <th scope="col">가격</th>
-        <th scope="col"></th>
-    </tr>
-    </thead>
+    <ul class="nav nav-tabs nav-justified">
+        <li class="nav-item">
+            <a class="nav-link" href="/memberDetail/download">다운로드</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/memberDetail/point">포인트내역</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/memberDetail/order">구매내역</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="#">장바구니</a>
+        </li>
+    </ul>
 
-    <tbody>
-    <tr th:each="cartItem : ${cart.cartItemDtoList}">
-        <th scope="row" th:text="${cartItemStat.index + 1}">1</th>
-        <td><a th:href="@{/itemDetail/{itemId}(itemId=${cartItem.itemId})}" th:text="${cartItem.itemName}"></a></td>
-        <td th:text="${cartItem.price}"></td>
-        <td><a th:href="@{/cart/delete/{itemId}(itemId=${cartItem.itemId})}">삭제하기</a></td>
-    </tr>
-    </tbody>
-</table>
-<h3>총계 [[${cart.totalPrice}]]</h3>
-<button type="button" onclick="location.href='board/all?page=0&sort=sequnce'">board</button>
-<button type="button" onclick="location.href='order'">주문하기</button>
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th scope="col" style="width: 10%">no</th>
+            <th scope="col">상품명</th>
+            <th scope="col">가격</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="cartItem : ${cart.cartItemDtoList}">
+            <th scope="row" th:text="${cartItemStat.index + 1}">1</th>
+            <td><a th:href="@{/itemDetail/{itemId}(itemId=${cartItem.itemId})}" th:text="${cartItem.itemName}"></a></td>
+            <td th:text="${cartItem.price}"></td>
+            <td><a th:href="@{/cart/delete/{itemId}(itemId=${cartItem.itemId})}">삭제하기</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <h3 class="text-end">총계 [[${cart.totalPrice}]]</h3>
+    <div class="text-center">
+        <button type="button" class="btn btn-primary" onclick="location.href='order'">주문하기</button>
+    </div>
+</div>
+
+
 </body>
 </html>

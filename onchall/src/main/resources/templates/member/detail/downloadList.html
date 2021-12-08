@@ -7,14 +7,27 @@
 <body>
 <div th:replace="~{fragment/navBar :: nav}"></div>
 
-<div th:object="${member}">
-    <h1>[[*{name}]]님 환영합니다.</h1>
-    email: <span th:text="*{email}">email</span><br>
-    point: <span th:text="*{point}">point</span>
-    <button type="button" disabled>다운로드</button>
-    <button type="button" onclick="location.href='/memberDetail/point'">포인트내역</button>
-    <button type="button" onclick="location.href='/memberDetail/order'">구매내역</button>
-    <button type="button" onclick="location.href='/cart'">장바구니</button>
+<div th:object="${member}" class="container pt-4">
+    <h1 class="text-center">[[*{name}]]님 환영합니다.</h1>
+    <div class="col p-4">
+        email: <span th:text="*{email}">email</span><br>
+        point: <span th:text="*{point}">point</span>
+    </div>
+
+    <ul class="nav nav-tabs nav-justified">
+        <li class="nav-item">
+            <a class="nav-link active" href="#">다운로드</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/memberDetail/point">포인트내역</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/memberDetail/order">구매내역</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/cart">장바구니</a>
+        </li>
+    </ul>
 
     <th:block th:each="download : ${downloadList}">
         <span th:text="${download.itemName}"></span>

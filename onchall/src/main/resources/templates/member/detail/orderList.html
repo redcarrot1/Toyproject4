@@ -11,35 +11,51 @@
 
 <body>
 <div th:replace="~{fragment/navBar :: nav}"></div>
-<div th:object="${member}">
-    <h1>[[*{name}]]님 환영합니다.</h1>
-    email: <span th:text="*{email}">email</span><br>
-    point: <span th:text="*{point}">point</span>
-    <button type="button" onclick="location.href='/memberDetail/download'">다운로드</button>
-    <button type="button" onclick="location.href='/memberDetail/point'">포인트내역</button>
-    <button type="button" disabled>구매내역</button>
-    <button type="button" onclick="location.href='/cart'">장바구니</button>
+<div th:object="${member}" class="container pt-4">
+    <h1 class="text-center">[[*{name}]]님 환영합니다.</h1>
+    <div class="col p-4">
+        email: <span th:text="*{email}">email</span><br>
+        point: <span th:text="*{point}">point</span>
+    </div>
+
+    <ul class="nav nav-tabs nav-justified">
+        <li class="nav-item">
+            <a class="nav-link" href="/memberDetail/download">다운로드</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/memberDetail/point">포인트내역</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="#">구매내역</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/cart">장바구니</a>
+        </li>
+    </ul>
+
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th scope="col" style="width: 10%">no</th>
+            <th scope="col">상품명</th>
+            <th scope="col">주문일자</th>
+            <th scope="col">총계</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="order : ${orderList}">
+            <th scope="row" th:text="${orderStat.index + 1}">1</th>
+            <td th:if="${order.orderItemCount == 0}"><a th:href="@{/orderDetail/{orderId}(orderId=${order.orderId})}"
+                                                        th:text="${order.repreItemName}"></a></td>
+            <td><a th:href="@{/orderDetail/{orderId}(orderId=${order.orderId})}"
+                   th:text="|${order.repreItemName} 외 ${order.orderItemCount}개|"
+                   th:unless="${order.orderItemCount == 1}"></a></td>
+            <td th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${order.totalPrice}"></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
-
-<table>
-    <thead>
-    <tr>
-        <th scope="col" style="width: 10%">no</th>
-        <th scope="col">상품명</th>
-        <th scope="col">주문일자</th>
-        <th scope="col">총계</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    <tr th:each="order : ${orderList}">
-        <th scope="row" th:text="${orderStat.index + 1}">1</th>
-        <td th:if="${order.orderItemCount == 0}"><a th:href="@{/orderDetail/{orderId}(orderId=${order.orderId})}" th:text="${order.repreItemName}"></a></td>
-        <td><a th:href="@{/orderDetail/{orderId}(orderId=${order.orderId})}" th:text="|${order.repreItemName} 외 ${order.orderItemCount}개|" th:unless="${order.orderItemCount == 1}"></a></td>
-        <td th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}"></td>
-        <td th:text="${order.totalPrice}"></td>
-    </tr>
-    </tbody>
-</table>
 </body>
 </html>
