@@ -12,40 +12,37 @@
 
 <body>
 <div th:replace="~{fragment/navBar :: nav}"></div>
-<div class="container pt-4">
-    <div>
+<div class="container pt-5">
+    <div class="mx-5 px-5 my-3">
         <h2>카테고리</h2>
         <th:block th:each="categoryName : ${categoryNameList}">
             <a th:href="@{/board/{category}(category=${categoryName}, page=0, sort=${pagination.sort})}"
-               th:text="${categoryName}"></a> /
+               th:text="${categoryName}"></a>/
         </th:block>
     </div>
 
-    <table class="table table-striped table-hover">
-        <thead>
-        <tr>
-            <th scope="col" style="width: 10%">no</th>
-            <th scope="col">이미지저장이름</th>
-            <th scope="col">제목</th>
-            <th scope="col">원래가격</th>
-            <th scope="col">판매가격</th>
-            <th scope="col">장바구니</th>
-        </tr>
-        </thead>
+    <div class="row px-5 mx-5">
+        <th:block th:each="item : ${pagination.itemList}">
+            <div class="col-md-3 margin mt-4">
+                <div class="card">
+                    <a th:href="@{/itemDetail/{itemId}(itemId=${item.itemId})}" class="text-dark">
+                        <img src="/image/testImage.png" class="card-img-top" th:alt="${item.name}" width="100">
+                        <input type="hidden" value="${item.storeImageName}"/>
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${item.name}"></h5>
+                            <h5 class="card-title" th:text="|${item.originPrice}원|" th:unless="${item.originPrice!=item.price}"></h5>
+                            <s class="card-title text-muted" th:text="${item.originPrice}" th:if="${item.originPrice!=item.price}"></s>
+                            <h4 class="card-title text-danger" th:text="|${item.price}원|"
+                                th:if="${item.originPrice!=item.price}"></h4>
+                            <a th:href="@{/cart/add/{itemId}(itemId=${item.itemId})}" class="btn btn-primary">장바구니</a>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </th:block>
+    </div>
 
-        <tbody>
-        <tr th:each="item : ${pagination.itemList}">
-            <th scope="row" th:text="${pagination.cntPage*12 + itemStat.index + 1}">1</th>
-            <td th:text="${item.storeImageName}"></td>
-            <td><a th:href="@{/itemDetail/{itemId}(itemId=${item.itemId})}" th:text="${item.name}"></a></td>
-            <td th:text="${item.originPrice}"></td>
-            <td th:text="${item.price}"></td>
-            <td><a th:href="@{/cart/add/{itemId}(itemId=${item.itemId})}">장바구니</a></td>
-        </tr>
-        </tbody>
-    </table>
-
-    <nav th:object="${pagination}">
+    <nav th:object="${pagination}" class="pt-5">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="*{isFirst} ? 'disabled'">
                 <a th:href="@{/board/{category}(category=*{category},page=0, sort=*{sort})}"
@@ -81,7 +78,8 @@
             </li>
         </ul>
     </nav>
-
 </div>
+
+<div th:replace="~{fragment/navBar :: footer}"></div>
 </body>
 </html>

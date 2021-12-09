@@ -35,5 +35,7 @@
         <a th:href="@{/download/{storeName}(storeName=${download.storeName})}">다운로드</a>
     </th:block>
 </div>
+
+<div th:replace="~{fragment/navBar :: footer}"></div>
 </body>
 </html>

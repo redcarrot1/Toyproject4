@@ -6,10 +6,28 @@
 
 <body>
 <div th:replace="~{fragment/navBar :: nav}"></div>
-<form method="post" th:action="@{/comment/add/{itemId}/{orderItemId} (itemId=${itemId}, orderItemId=${orderItemId})}" th:object="${commentForm}">
-    <p>rating: <input type="number" min="1" max="5" th:field="*{rating}"/></p>
-    <p>content: <input type="text" th:field="*{content}"/></p>
-    <button>댓글쓰기</button>
-</form>
+<div class="container pt-4">
+    <form method="post"
+          th:action="@{/comment/add/{itemId}/{orderItemId} (itemId=${itemId}, orderItemId=${orderItemId})}"
+          th:object="${commentForm}">
+        <label for="sel" class="form-label h5">Rating: </label>
+        <select th:field="*{rating}" class="form-select" id="sel">
+            <option value=5>5</option>
+            <option value=4>4</option>
+            <option value=3>3</option>
+            <option value=2>2</option>
+            <option value=1>1</option>
+        </select>
+
+        <div class="mb-3 mt-3">
+            <label for="comment" class="form-label h5">Comments:</label>
+            <textarea class="form-control" rows="5" id="comment" th:field="*{content}"></textarea>
+        </div>
+        <div class="text-center">
+            <button class="btn btn-success">댓글쓰기</button>
+        </div>
+    </form>
+</div>
+<div th:replace="~{fragment/navBar :: footer}"></div>
 </body>
 </html>

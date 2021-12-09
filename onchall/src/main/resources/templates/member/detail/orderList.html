@@ -46,16 +46,19 @@
         <tbody>
         <tr th:each="order : ${orderList}">
             <th scope="row" th:text="${orderStat.index + 1}">1</th>
-            <td th:if="${order.orderItemCount == 0}"><a th:href="@{/orderDetail/{orderId}(orderId=${order.orderId})}"
-                                                        th:text="${order.repreItemName}"></a></td>
-            <td><a th:href="@{/orderDetail/{orderId}(orderId=${order.orderId})}"
-                   th:text="|${order.repreItemName} 외 ${order.orderItemCount}개|"
-                   th:unless="${order.orderItemCount == 1}"></a></td>
+            <td th:if="${order.orderItemCount == 0}">
+                <a th:href="@{/orderDetail/{orderId}(orderId=${order.orderId})}" th:text="${order.repreItemName}"></a>
+            </td>
+            <td th:unless="${order.orderItemCount == 0}">
+                <a th:href="@{/orderDetail/{orderId}(orderId=${order.orderId})}" th:text="|${order.repreItemName} 외 ${order.orderItemCount}개|"></a>
+            </td>
             <td th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}"></td>
             <td th:text="${order.totalPrice}"></td>
         </tr>
         </tbody>
     </table>
 </div>
+
+<div th:replace="~{fragment/navBar :: footer}"></div>
 </body>
 </html>

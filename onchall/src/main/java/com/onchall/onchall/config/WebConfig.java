@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .order(1) //낮을 수록 먼저 호출
                 .addPathPatterns("/**") //인터셉터를 적용할 url 패턴
                 .excludePathPatterns("/css/**", "/*.ico", "/error", "/login", "/signup",
-                        "/test/**", "/findPassword", "/changePassword", "/email/duplication"); //인터셉터에서 제외할 패턴 지정
+                        "/test/**", "/findPassword", "/changePassword", "/email/duplication", "/image/**"); //인터셉터에서 제외할 패턴 지정
     }
 
     @Override

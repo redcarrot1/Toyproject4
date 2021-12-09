@@ -10,15 +10,7 @@
 
 <th:block th:fragment="nav_bar">
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <a class="navbar-brand" href="/home">ONCHALL</a>
-        <button
-                class="navbar-toggler"
-                type="button"
-                data-toggle="collapse"
-                data-target="#collapsibleNavbar"
-        >
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <a class="navbar-brand px-4" href="/home">ONCHALL</a>
 
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
@@ -50,6 +42,70 @@
             </ul>
         </div>
     </nav>
+</th:block>
+
+<th:block th:fragment="footer">
+    <div th:replace="~{fragment/feed_back_modal :: feedBack}"></div>
+    <div class="container">
+        <footer class="
+          d-flex
+          flex-wrap
+          justify-content-between
+          align-items-center
+          py-3
+          my-4
+          border-top
+        ">
+            <p class="col-md-4 mb-0 text-muted">🚜🚌🚍 2021 ROKAF</p>
+
+            <a href="#"
+               class="
+            col-md-4
+            d-flex
+            align-items-center
+            justify-content-center
+            mb-3 mb-md-0
+            me-md-auto
+            link-dark
+            text-decoration-none
+          ">
+                <h2>ONCHALL</h2>
+            </a>
+
+            <ul class="nav col-md-4 justify-content-end">
+                <li class="nav-item">
+                    <a id="back-to-top" class="nav-link px-2 text-muted" href="#">맨 위로</a>
+                </li>
+                <li class="nav-item">
+                    <a type="button" class="nav-link px-2 text-muted" data-bs-toggle="modal" data-bs-target="#myModal">
+                        피드백
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link px-2 text-muted">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link px-2 text-muted">Update</a>
+                </li>
+            </ul>
+        </footer>
+    </div>
+    <script>
+        $(function () {
+            $('#back-to-top').on('click', function (e) {
+                e.preventDefault();
+                $('html,body').animate({scrollTop: 0}, 600);
+            });
+
+            $(window).scroll(function () {
+                if ($(document).scrollTop() > 100) {
+                    $('#back-to-top').addClass('show');
+                } else {
+                    $('#back-to-top').removeClass('show');
+                }
+            });
+        });
+    </script>
 </th:block>
 </body>
 </html>
