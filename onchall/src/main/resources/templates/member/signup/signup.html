@@ -7,31 +7,112 @@
 
 <body>
 <div th:replace="~{fragment/navBar :: nav}"></div>
-<div>
-    <form method="post" action="signup" th:object="${signupForm}">
-        <p>name: <input type="text" th:field="*{name}"/></p>
-        <p>email: <input type="email" th:field="*{email}"/></p>
-        <button type="button" onclick="isDuplication()">중복체크</button>
-        <p>password: <input type="password" th:field="*{password}"/></p>
-        <button>signup</button>
+<div class="container pt-5 text-center">
+    <h1 class="h3 mb-3 font-weight-normal">Sign up</h1>
+    <form method="post" action="signup" th:object="${signupForm}" id="form">
+        <div class="container-md pt-3">
+            <label for="name" class="visually-hidden">Name</label>
+            <input type="text" id="name" class="form-control-lg" th:field="*{name}"
+                   placeholder="name" th:errorclass="field-error">
+            <div class="field-error" th:errors="*{name}" style="color: red;"/>
+        </div>
+        <div class="container-md pt-3">
+            <label for="inputEmail" class="visually-hidden">Email</label>
+            <input type="email" id="inputEmail" class="form-control-lg" th:field="*{email}"
+                   placeholder="email" th:errorclass="field-error">
+            <button type="button" onclick="isDuplication();">중복확인</button>
+            <div class="field-error" th:errors="*{email}" style="color: red;"/>
+        </div>
+
+        <div class="container-md pt-3">
+            <label for="inputPassword" class="visually-hidden">Password</label>
+            <input type="password" id="inputPassword" class="form-control-lg" th:field="*{password}"
+                   placeholder="password" th:errorclass="field-error">
+            <div class="field-error" th:errors="*{password}" style="color: red;"/>
+        </div>
+
+        <div class="container-md pt-3">
+            <label for="inputPassword" class="visually-hidden">PasswordAgain</label>
+            <input type="password" id="passwordAgain" class="form-control-lg" placeholder="passwordAgain">
+        </div>
+
+        <div th:if="${#fields.hasGlobalErrors()}">
+            <p class="field-error" th:each="err : ${#fields.globalErrors()}"
+               th:text="${err}" style="color: red;">전체 오류 메시지</p>
+        </div>
+        <br>
+        <button class="btn btn-lg btn-primary btn-block" type="button" onclick="submitForm()">signup</button>
     </form>
+
+    <div class="d-flex justify-content-center links">
+        Do you have an account already?<a href="login">Login</a>
+    </div>
 </div>
 
 <script>
     function isDuplication() {
+        var emailVal = document.getElementById('inputEmail').value;
+        var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+        if (emailVal.match(regExp) == null) {
+            alert('email 형식을 입력해주세요.');
+            return;
+        }
+
         console.log("실행");
         axios.post('/email/duplication',
             {
-                email: document.getElementById('email').value
+                email: emailVal
             }
         )
             .then(function (response) {
                 console.log(response.data);
+                if(response.data==true){
+                    alert("사용하실 수 있는 이메일입니다.");
+                }
+                else{
+                    alert("사용하실 수 없는 이메일입니다.");
+                }
             })
             .catch(function (error) {
                 console.log(error);
             });
     }
+
+    function submitForm(){
+        var emailVal = document.getElementById('inputEmail').value;
+        var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+        if (emailVal.match(regExp) == null) {
+            alert('email을 확인해주세요.');
+            return;
+        }
+        console.log("실행");
+        axios.post('/email/duplication',
+            {
+                email: emailVal
+            }
+        )
+            .then(function (response) {
+                console.log(response.data);
+                if(response.data!=true){
+                    alert('email을 확인해주세요.');
+                    return;
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+                alert('email을 확인해주세요.');
+                return;
+            });
+
+        var inputPassword = document.getElementById('inputPassword').value;
+        var passwordConfirm = document.getElementById('passwordAgain').value;
+        if(inputPassword!=passwordConfirm){
+            alert("비밀번호가 일치하지 않습니다.");
+            return;
+        }
+        document.getElementById('form').submit();
+    }
+
 </script>
 
 <div th:replace="~{fragment/navBar :: footer}"></div>

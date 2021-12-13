@@ -6,15 +6,12 @@
 
 <body>
 <div th:replace="~{fragment/navBar :: nav}"></div>
-<div>
-    <h1>인증 이메일이 전송되었습니다.</h1>
-    <h1>회원가입을 완료하시려면 '인증하기' 버튼을 눌러주세요.</h1>
-    <button
-            type="button"
-            onclick="location.href='/login'"
-    >
+<div class="container pt-5 text-center">
+    <h3>인증 이메일이 전송되었습니다.</h3>
+    <h3>회원가입을 완료하시려면 '인증하기' 버튼을 눌러주세요.</h3>
+    <a type="button" href="login" class="btn btn-success">
         login
-    </button>
+    </a>
 </div>
 
 <div th:replace="~{fragment/navBar :: footer}"></div>

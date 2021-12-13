@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <head th:replace="~{fragment/header :: common_header_ts(~{::title}, ~{::style})}">
     <title>itemDetail</title>
     <style>
@@ -14,7 +15,7 @@
 <div class="container pt-5">
     <div th:object="${itemDetail}" class="row px-5 mx-5">
         <div class="col-6">
-            <img src="/image/testImage.png" class="card-img-top" th:alt="*{storeImageName}" height="400"
+            <img th:src="|/image/*{storeImageName}|" class="card-img-top" th:alt="*{storeImageName}" height="400"
                  style="width: auto">
         </div>
         <div class="col-6">
@@ -22,7 +23,7 @@
             <p>구매 후 7일간만 다운로드가 가능한 pdf 파일입니다.<br>교환 및 환불이 불가한 상품입니다. 확인후 결제하여 주시기 바랍니다.<br>
                 개인 맞춤형 학원의 노하우가 들어있는 ‘강의가 들어있는 개념서’ pdf </p>
             <br>
-            <h3><a th:href="@{/cart/add/{itemId}(itemId=*{itemId})}">장바구니</a></h3><br>
+            <h3><a class="btn btn-primary" th:onclick="addCart()">장바구니</a></h3><br>
             <h3>category: <a th:href="@{/board/{category}(category=*{categoryName}, page=0, sort='변경필요')}"
                              th:text="*{categoryName}">카테고리이름</a></h3>
         </div>
@@ -78,11 +79,12 @@
                         <input type="hidden" value="${item.storeImageName}"/>
                         <div class="card-body">
                             <h6 class="card-title" th:text="${relatedItem.name}"></h6>
-                            <h6 class="card-title" th:text="|${relatedItem.originPrice}원|" th:unless="${relatedItem.originPrice!=relatedItem.price}"></h6>
-                            <s class="card-title text-muted" th:text="${relatedItem.originPrice}" th:if="${relatedItem.originPrice!=relatedItem.price}"></s>
+                            <h6 class="card-title" th:text="|${relatedItem.originPrice}원|"
+                                th:unless="${relatedItem.originPrice!=relatedItem.price}"></h6>
+                            <s class="card-title text-muted" th:text="${relatedItem.originPrice}"
+                               th:if="${relatedItem.originPrice!=relatedItem.price}"></s>
                             <h5 class="card-title text-danger" th:text="|${relatedItem.price}원|"
                                 th:if="${relatedItem.originPrice!=relatedItem.price}"></h5>
-                            <a th:href="@{/cart/add/{itemId}(itemId=${relatedItem.itemId})}" class="btn btn-primary">장바구니</a>
                         </div>
                     </a>
                 </div>
@@ -91,5 +93,23 @@
     </div>
 </div>
 <div th:replace="~{fragment/navBar :: footer}"></div>
+
+<script th:inline="javascript">
+    function addCart() {
+        console.log("실행");
+        axios.get('/cart/add/' + [[${itemDetail.itemId}]])
+            .then(function (response) {
+                console.log(response.data);
+                if (response.data == true) {
+                    alert('장바구니에 담겼습니다.');
+                } else {
+                    alert('이미 장바구니에 있는 제품입니다.');
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+</script>
 </body>
 </html>

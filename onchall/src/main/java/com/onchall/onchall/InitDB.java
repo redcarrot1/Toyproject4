@@ -104,7 +104,7 @@ public class InitDB {
     public void initItemFor70() {
         for (int i = 1; i < 36; i++) {
             Item item = new Item("[온챌개념서]고등수학상" + i, 9000 + i * 50,10000 + i * 100,
-                    "[온챌개념서]고등수학상_통합_이미지" + i, "개념과 문제가 함께있는 책" + i);
+                    "testImage.png", "개념과 문제가 함께있는 책" + i);
             Category category = categoryRepository.findByName("고등수학상").get();
             FileData fileData = fileDataRepository.findByUploadName("고등수학상_통합파일").get();
             item.setCategory(category);
@@ -115,7 +115,7 @@ public class InitDB {
         //5개는 장바구니에 넣기
         for (int i = 36; i < 41; i++) {
             Item item = new Item("[온챌개념서]고등수학하" + i, 9000 + i * 50, 10000 + i * 100,
-                    "[온챌개념서]고등수학하_통합_이미지" + i, "초보자가 보기 좋은 책" + i);
+                    "testImage.png", "초보자가 보기 좋은 책" + i);
             Category category = categoryRepository.findByName("고등수학하").get();
             FileData fileData = fileDataRepository.findByUploadName("고등수학하_통합파일").get();
             item.setCategory(category);
@@ -125,7 +125,7 @@ public class InitDB {
         }
         for (int i = 41; i < 71; i++) {
             Item item = new Item("[온챌개념서]고등수학하" + i, 9000 + i * 50, 10000 + i * 100,
-                    "[온챌개념서]고등수학하_통합_이미지" + i, "초보자가 보기 좋은 책" + i);
+                    "testImage.png", "초보자가 보기 좋은 책" + i);
             Category category = categoryRepository.findByName("고등수학하").get();
             FileData fileData = fileDataRepository.findByUploadName("고등수학하_통합파일").get();
             item.setCategory(category);

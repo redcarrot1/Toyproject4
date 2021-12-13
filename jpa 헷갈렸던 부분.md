@@ -162,3 +162,30 @@ assertThat(page.hasNext()).isTrue(); //다음 페이지가 있는가?
 
 
 - 전체 count 쿼리는 매우 무겁다. 따라서 데이터가 복잡할 때는 카운트 쿼리를 분리하는게 매우 중요하다.
+
+
+
+
+
+
+
+
+
+
+
+이미지 보여주기
+
+```java
+@ResponseBody
+@GetMapping("/images/{filename}")
+public Resource showImage(@PathVariable String filename) throws MalformedURLException {
+ 	return new UrlResource("file:" + file.getFullPath(filename));
+}
+```
+
+- 인텔리제이 내부 경로로 직접 접근하면 `404`에러가 뜬다.
+  - 컴파일 후 이미지에 접근하면 정상작동한다.
+  - 하지만 사용자가 업로드 후 접근하려하면 에러뜸
+- 따라서 이미지 리소스를 리턴해주는 컨트롤러가 필요함
+- 위와 같은 코드를 사용해 `file:/USERS/...`와 같은 경로로 `UrlResource`를 요청하면된다.
+- 이때 `Resource`는 스프링에 있는 라이브러리를 사용하면 된다.

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<head th:replace="~{fragment/header :: common_header_t(~{::title})}">
+    <title>addItem</title>
+</head>
+<body>
+<div th:replace="~{fragment/navBar :: nav}"></div>
+
+<div class="container pt-5" th:object="${registerForm}">
+    <form action="/item/add" method="post" enctype="multipart/form-data">
+        <ul>
+            <li>이미지 파일 <input type="file" multiple="multiple" accept="image/*" th:field="*{image}"/></li>
+            <li>이름 <input type="text" th:field="*{itemName}"/></li>
+            <li>원래 가격 <input type="number" th:field="*{originPrice}"/></li>
+            <li>판매 가격 <input type="number" th:field="*{price}"/></li>
+            <li>상품 설명 <textarea th:field="*{description}"/></li>
+            <li id="categoryLi">
+                <select th:field="*{categoryId}">
+                    <option value="">==카테고리 선택==</option>
+                    <option th:each="category : ${categoryList}" th:value="${category.id}"
+                            th:text="${category.name}">
+                    </option>
+                </select>
+                <a type="button" class="nav-link px-2 text-muted" data-bs-toggle="modal" data-bs-target="#myModal">
+                    카테고리 추가하기
+                </a>
+            </li>
+            <li>파일 업로드 <input type="file" multiple="multiple" th:field="*{fileData}"></li>
+            <li><input type="submit"/></li>
+        </ul>
+    </form>
+</div>
+
+
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">카테고리 추가하기</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <input type="name" placeholder="카테고리 이름" id="newCategoryName"/>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" th:onclick="refreshCategory()">
+                    추가하기
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</div>
+<div th:replace="~{fragment/navBar :: footer}"></div>
+
+<script th:inline="javascript">
+    function refreshCategory() {
+        console.log("실행");
+        let newCategoryName=document.querySelector('#newCategoryName').value;
+        axios.post('/category/add', {
+            name: newCategoryName
+        })
+            .then(function (response) {
+                console.log(response.data);
+                if (response.data == true) {
+                    alert('카테고리 추가 성공');
+                    $("#categoryLi").load(window.location.href + " #categoryLi");
+                } else {
+                    alert('카테고리 추가 실패');
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+</script>
+</body>
+</html>

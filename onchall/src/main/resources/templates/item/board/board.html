@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <head th:replace="~{fragment/header :: common_header_ts(~{::title}, ~{::style})}">
     <title>board</title>
     <style>
@@ -26,15 +26,16 @@
             <div class="col-md-3 margin mt-4">
                 <div class="card">
                     <a th:href="@{/itemDetail/{itemId}(itemId=${item.itemId})}" class="text-dark">
-                        <img src="/image/testImage.png" class="card-img-top" th:alt="${item.name}" width="100">
-                        <input type="hidden" value="${item.storeImageName}"/>
+                        <img th:src="|/image/${item.storeImageName}|" class="card-img-top" th:alt="${item.name}" width="100">
                         <div class="card-body">
                             <h5 class="card-title" th:text="${item.name}"></h5>
-                            <h5 class="card-title" th:text="|${item.originPrice}원|" th:unless="${item.originPrice!=item.price}"></h5>
-                            <s class="card-title text-muted" th:text="${item.originPrice}" th:if="${item.originPrice!=item.price}"></s>
+                            <h5 class="card-title" th:text="|${item.originPrice}원|"
+                                th:unless="${item.originPrice!=item.price}"></h5>
+                            <s class="card-title text-muted" th:text="${item.originPrice}"
+                               th:if="${item.originPrice!=item.price}"></s>
                             <h4 class="card-title text-danger" th:text="|${item.price}원|"
                                 th:if="${item.originPrice!=item.price}"></h4>
-                            <a th:href="@{/cart/add/{itemId}(itemId=${item.itemId})}" class="btn btn-primary">장바구니</a>
+                            <a th:onclick="|addCart('${item.itemId}')|" class="btn btn-primary">장바구니</a>
                         </div>
                     </a>
                 </div>
@@ -81,5 +82,37 @@
 </div>
 
 <div th:replace="~{fragment/navBar :: footer}"></div>
+
+<script th:inline="javascript">
+    function getSessionCookie() {
+        var x, y;
+        var val = document.cookie.split(';');
+
+        for (var i = 0; i < val.length; i++) {
+            x = val[i].substr(0, val[i].indexOf('='));
+            y = val[i].substr(val[i].indexOf('=') + 1);
+            x = x.replace(/^\s+|\s+$/g, ''); // 앞과 뒤의 공백 제거하기
+            if (x == 'JSESSIONID') {
+                return unescape(y); // unescape로 디코딩 후 값 리턴
+            }
+        }
+    }
+
+    function addCart(itemId) {
+        console.log("실행");
+        axios.get('/cart/add/'+ itemId)
+            .then(function (response) {
+                console.log(response.data);
+                if (response.data == true) {
+                    alert('장바구니에 담겼습니다.');
+                } else {
+                    alert('이미 장바구니에 있는 제품입니다.');
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+</script>
 </body>
 </html>

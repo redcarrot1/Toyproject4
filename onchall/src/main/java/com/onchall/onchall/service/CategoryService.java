@@ -1,5 +1,6 @@
 package com.onchall.onchall.service;
 
+import com.onchall.onchall.dto.CategoryIdAndName;
 import com.onchall.onchall.entity.Category;
 import com.onchall.onchall.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,4 +21,17 @@ public class CategoryService {
                 .map(Category::getName)
                 .collect(Collectors.toList());
     }
+
+    public List<CategoryIdAndName> getCategoryIdAndName(){
+        return categoryRepository.findAll().stream()
+                .map(e-> new CategoryIdAndName(e.getId(), e.getName()))
+                .collect(Collectors.toList());
+    }
+
+    public Category addCategory(String name){
+        Category category = new Category();
+        category.setName(name);
+        return categoryRepository.save(category);
+    }
+
 }
