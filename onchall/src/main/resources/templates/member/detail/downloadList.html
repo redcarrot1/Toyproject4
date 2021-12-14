@@ -32,7 +32,7 @@
     <th:block th:each="download : ${downloadList}">
         <span th:text="${download.itemName}"></span>
         <span th:text="${#temporals.format(download.expireDate, 'yyyy-MM-dd HH:mm')}"></span>
-        <a th:href="@{/download/{storeName}(storeName=${download.storeName})}">다운로드</a>
+        <a th:href="@{/attach/{fileDataId}(fileDataId=${download.downloadFileId})}">다운로드</a>
     </th:block>
 </div>
 

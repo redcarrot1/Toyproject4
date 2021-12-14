@@ -12,10 +12,13 @@ import com.onchall.onchall.entity.Purchased;
 import com.onchall.onchall.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +39,7 @@ public class MemberDetailController {
         List<Download> downloadList = new ArrayList<>();
         List<Purchased> purchased = memberService.getPurchased(loginMember.getId());
         purchased.forEach(e ->
-                downloadList.add(new Download(e.getItemName(), e.getExpiryDate(), e.getFileData().getStoreName())));
+                downloadList.add(new Download(e.getItemName(), e.getExpiryDate(), e.getFileData().getStoreName(), e.getId())));
 
         //로그인된 회원
         model.addAttribute("member",
@@ -80,11 +83,9 @@ public class MemberDetailController {
         orders.forEach(e ->
                 orderSimpleList.add(new OrderSimple(e.getId(), e.getRepreItemName(), e.getOrderItemCount() - 1, e.getOrderDate(), e.getTotalPrice())));
 
-        //로그인된 회원
         model.addAttribute("member",
                 new MemberDetail(loginMember.getName(), loginMember.getEmail(), loginMember.getPoint()));
 
-        //다운로드 목록
         model.addAttribute("orderList", orderSimpleList);
         return "member/detail/orderList";
     }

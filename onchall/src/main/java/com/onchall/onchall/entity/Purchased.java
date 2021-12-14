@@ -25,4 +25,11 @@ public class Purchased {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="member_id")
     private Member member;
+
+    public Purchased(String itemName, LocalDateTime expiryDate, FileData fileData, Member member) {
+        this.itemName = itemName;
+        this.expiryDate = expiryDate;
+        this.fileData = fileData;
+        this.member = member;
+    }
 }

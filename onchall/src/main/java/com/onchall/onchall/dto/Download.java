@@ -11,4 +11,5 @@ public class Download {
     String itemName;
     LocalDateTime expireDate;
     String storeName;
+    Long downloadFileId;
 }

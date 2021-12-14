@@ -189,3 +189,32 @@ public Resource showImage(@PathVariable String filename) throws MalformedURLExce
 - 따라서 이미지 리소스를 리턴해주는 컨트롤러가 필요함
 - 위와 같은 코드를 사용해 `file:/USERS/...`와 같은 경로로 `UrlResource`를 요청하면된다.
 - 이때 `Resource`는 스프링에 있는 라이브러리를 사용하면 된다.
+
+
+
+
+
+
+
+첨부파일 다운로드
+
+```java
+@GetMapping("/attach/{fileDataId}")
+public ResponseEntity<Resource> downloadAttach(@PathVariable Long fileDataId) throws MalformedURLException {
+  FileData fileData = fileDataService.findById(fileDataId);
+  String storeFileName = fileData.getStoreName();
+  String uploadFileName = fileData.getUploadName();
+
+  UrlResource resource = new UrlResource("file:" + fileStorePath + storeFileName);
+
+  String encodeUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
+  String contentDisposition = "attachment; filename=\"" + encodeUploadFileName + "\"";
+
+  return ResponseEntity.ok()
+    .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+    .body(resource);
+}
+```
+
+- `encodeUploadFileName` : 한글 이름이 깨질 가능성도 있음. 따라서 `UTF_8`로 인코딩 해주기
+- `contentDisposition`: 브라우저에서 다운로드 되는 첨부파일로 설정하기 위해서는 특별한 헤더가 필요하다.
