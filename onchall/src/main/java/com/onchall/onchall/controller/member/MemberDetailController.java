@@ -39,7 +39,7 @@ public class MemberDetailController {
         List<Download> downloadList = new ArrayList<>();
         List<Purchased> purchased = memberService.getPurchased(loginMember.getId());
         purchased.forEach(e ->
-                downloadList.add(new Download(e.getItemName(), e.getExpiryDate(), e.getFileData().getStoreName(), e.getId())));
+                downloadList.add(new Download(e.getItemName(), e.getExpiryDate(), e.getFileData().getStoreName(), e.getFileData().getId())));
 
         //로그인된 회원
         model.addAttribute("member",

@@ -21,6 +21,7 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
     private final CartItemRepository cartItemRepository;
     private final PurchasedRepository purchasedRepository;
+    private final MemberRepository memberRepository;
     private final CartRepository cartRepository;
 
 
@@ -29,11 +30,8 @@ public class OrderService {
     }
 
     @Transactional
-    public Order addOrder(Member member, Integer usePoint, String payMethod) {
-        //초기화
-        member.getName();
-        List<Purchased> purchasedList = member.getPurchasedList();
-        purchasedList.size();
+    public Order addOrder(Member loginMember, Integer usePoint, String payMethod) {
+        Member member = memberRepository.findById(loginMember.getId()).get();
 
         Cart cart = member.getCart();
         List<CartItem> cartItems = cartItemRepository.findByCartId(cart.getId());
@@ -52,9 +50,6 @@ public class OrderService {
         else order.setPayMethod(PayMethod.BankBook);
 
         Order saveOrder = orderRepository.save(order);
-        if(!member.getPurchasedList().isEmpty()){
-            member.getPurchasedList().get(0);
-        }
 
         for (Item e : items) {
             OrderItem orderItem = new OrderItem();
@@ -69,7 +64,7 @@ public class OrderService {
             saveOrder.getOrderItems().add(saveOrderItem);
 
             Purchased purchased = purchasedRepository.save(new Purchased(e.getName(), LocalDateTime.now().plusDays(7), e.getFileData(), member));
-            purchasedList.add(purchased);
+            member.getPurchasedList().add(purchased);
         }
 
         saveOrder.setTotalPrice(totalPrice);

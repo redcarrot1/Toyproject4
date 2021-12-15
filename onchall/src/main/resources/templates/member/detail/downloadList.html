@@ -29,11 +29,25 @@
         </li>
     </ul>
 
-    <th:block th:each="download : ${downloadList}">
-        <span th:text="${download.itemName}"></span>
-        <span th:text="${#temporals.format(download.expireDate, 'yyyy-MM-dd HH:mm')}"></span>
-        <a th:href="@{/attach/{fileDataId}(fileDataId=${download.downloadFileId})}">다운로드</a>
-    </th:block>
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th scope="col" style="width: 10%">no</th>
+            <th scope="col">상품명</th>
+            <th scope="col">다운로드 기간</th>
+            <th scope="col">다운로드</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="download : ${downloadList}">
+            <th scope="row" th:text="${downloadStat.index + 1}">1</th>
+            <td th:text="${download.itemName}">상품명</td>
+            <td th:text="${#temporals.format(download.expireDate, 'yyyy-MM-dd HH:mm')}"></td>
+            <td><a th:href="@{/attach/{fileDataId}(fileDataId=${download.downloadFileId})}">다운로드</a></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 <div th:replace="~{fragment/navBar :: footer}"></div>
