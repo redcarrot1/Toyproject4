@@ -26,6 +26,7 @@ public class InitDB {
     private final CartService cartService;
     private final OrderItemRepository orderItemRepository;
     private final OrderRepository orderRepository;
+    private final PointRepository pointRepository;
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
@@ -38,6 +39,7 @@ public class InitDB {
         //initItemFor20();
         initItemFor70();
         initOrder();
+        initPoint();
     }
 
     public void initMember() {
@@ -168,5 +170,12 @@ public class InitDB {
             saveOrder.getOrderItems().add(saveOrderItem);
         };
         saveOrder.setTotalPrice(totalPrice);
+    }
+
+    public void initPoint(){
+        Member member = memberService.findMemberNameAndEmail("testMember1", "asdf@asdf.com");
+        pointRepository.save(new Point("신규가입", 1000, member));
+        pointRepository.save(new Point("관리자권한", 3000, member));
+
     }
 }

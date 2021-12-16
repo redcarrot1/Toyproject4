@@ -24,4 +24,13 @@ public class Point {
     private Member member;
 
     private LocalDateTime dateTime;
+
+    public Point(String description, Integer value, Member member) {
+        this.description = description;
+        this.value = value;
+        this.member = member;
+        this.dateTime=LocalDateTime.now();
+        member.getPointHistory().add(this);
+        member.setPoint(member.getPoint()+value);
+    }
 }

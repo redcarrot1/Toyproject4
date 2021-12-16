@@ -48,4 +48,7 @@ public class Member {
         this.state = state;
     }
     public void setPassword(String password){this.password=password;}
+    public void setPoint(Integer point) {
+        this.point = point;
+    }
 }

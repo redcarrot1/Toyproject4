@@ -41,7 +41,8 @@
             <div class="col-6">
                 <h3>포인트</h3>
                 <span th:text="|보유: ${orderForm.memberPoint}|"></span><br>
-                사용: <input type="number" th:field="${orderForm.usePoint}"/><br>
+                사용: <input type="number" th:field="${orderForm.usePoint}" min=0 th:max="${orderForm.memberPoint}" onchange="changePoint(this.value)"/><br>
+                <button th:onclick="pointAllUse()" type="button">전부사용</button>
             </div>
         </div>
         <br><br>
@@ -49,13 +50,13 @@
         <div class="row">
             <div class="col-6">
                 <h3>결제수단</h3>
-                <input type="radio" th:field="${orderForm.payMethod}" value="Card" checked>카드
-                <input type="radio" th:field="${orderForm.payMethod}" value="BankBook">계좌 입금
+                <input type="radio" th:field="${orderForm.payMethod}" value="Card" name="payMethod" checked>카드
+                <input type="radio" th:field="${orderForm.payMethod}" value="BankBook" name="payMethod">계좌 입금
             </div>
             <div class="col-6">
                 <h3 th:text="|주문금액: ${orderForm.totalOrderPrice}|"></h3>
-                <h3>포인트사용: [js로 처리]</h3>
-                <h3>실결제: [js로 처리]</h3>
+                <h3 id="point">포인트사용: 0</h3>
+                <h3 id="pay" th:text="|실결제: ${orderForm.totalOrderPrice}|">실결제: [js로 처리]</h3>
             </div>
         </div>
         <div class="text-center">
@@ -64,5 +65,26 @@
     </form>
 </div>
 <div th:replace="~{fragment/navBar :: footer}"></div>
+
+<script>
+   let price=[[${orderForm.totalOrderPrice}]];
+   let hasPoint=[[${orderForm.memberPoint}]]
+    function changePoint(value){
+        let pointElement = document.getElementById("point");
+        pointElement.innerText = "포인트사용: "+value;
+
+        let payElement = document.getElementById("pay");
+        let orderPrice = price-value;
+        payElement.innerText = "실결제: "+ orderPrice;
+    }
+
+    function pointAllUse(){
+        let usePointElement = document.getElementById("usePoint");
+        usePointElement.value=hasPoint;
+        changePoint(hasPoint);
+    }
+
+</script>
+
 </body>
 </html>

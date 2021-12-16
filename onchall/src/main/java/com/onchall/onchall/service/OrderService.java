@@ -22,7 +22,7 @@ public class OrderService {
     private final CartItemRepository cartItemRepository;
     private final PurchasedRepository purchasedRepository;
     private final MemberRepository memberRepository;
-    private final CartRepository cartRepository;
+    private final PointRepository pointRepository;
 
 
     public Order findById(Long orderId) {
@@ -73,6 +73,8 @@ public class OrderService {
             cartItemRepository.delete(cartItem);
         }
         cartItems.clear();
+
+        pointRepository.save(new Point("구매 사용", -usePoint, member));
 
         return saveOrder;
     }

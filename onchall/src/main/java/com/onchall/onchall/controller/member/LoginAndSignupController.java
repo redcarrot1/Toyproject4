@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 
@@ -31,14 +32,15 @@ public class LoginAndSignupController {
     }
 
     @GetMapping("/login")
-    public String loginForm(Model model) {
+    public String loginForm(Model model, @RequestParam(defaultValue = "/") String redirectURL) {
         model.addAttribute("loginForm", new LoginForm());
+        model.addAttribute("redirectURL", redirectURL);
         return "member/login/login";
     }
 
     @PostMapping("/login")
     public String login(@Validated @ModelAttribute LoginForm loginForm, BindingResult bindingResult,
-                        HttpServletRequest request, Model model) {
+                        HttpServletRequest request, @RequestParam(defaultValue = "/") String redirectURL) {
         if (bindingResult.hasErrors()) {
             log.warn("로그인 실패. errors={}", bindingResult);
             return "member/login/login";
@@ -57,7 +59,8 @@ public class LoginAndSignupController {
 
         HttpSession session = request.getSession();
         session.setAttribute("loginMember", loginMember);
-        return "redirect:/memberDetail/download";
+
+        return "redirect:" + redirectURL;
     }
 
     @GetMapping("/signup")

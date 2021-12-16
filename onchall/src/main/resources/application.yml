@@ -47,7 +47,7 @@ spring.servlet.multipart.maxFileSize: 10MB
 spring.servlet.multipart.maxRequestSize: 10MB
 
 store.path:
-  #image: /Users/hongseungtaeg/Desktop/toyproject/toyProject4-Monolithic web/onchall/src/main/resources/static/image/
-  #file: /Users/hongseungtaeg/Desktop/toyproject/toyProject4-Monolithic web/onchall/src/main/resources/static/file/
-  image: C:\Users\s_gmtmoney2357\Desktop\ToyProject\ToyProject4\onchall\src\main\resources\static\image\
-  file: C:\Users\s_gmtmoney2357\Desktop\ToyProject\ToyProject4\onchall\src\main\resources\static\file\
+  image: /Users/hongseungtaeg/Desktop/toyproject/toyProject4-Monolithic web/onchall/src/main/resources/static/image/
+  file: /Users/hongseungtaeg/Desktop/toyproject/toyProject4-Monolithic web/onchall/src/main/resources/static/file/
+  #image: C:\Users\s_gmtmoney2357\Desktop\ToyProject\ToyProject4\onchall\src\main\resources\static\image\
+  #file: C:\Users\s_gmtmoney2357\Desktop\ToyProject\ToyProject4\onchall\src\main\resources\static\file\
