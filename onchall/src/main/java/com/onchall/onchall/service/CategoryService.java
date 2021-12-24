@@ -34,4 +34,13 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
+    public Category getCategoryByName(String name){
+        return categoryRepository.findByName(name)
+                .orElseThrow(()->new IllegalArgumentException("존재하는 카테고리가 없습니다."));
+    }
+    public Category getCategoryById(Long id){
+        return categoryRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("존재하는 카테고리가 없습니다."));
+    }
+
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <head th:replace="~{fragment/header :: common_header_t(~{::title})}">
     <title>comment</title>
 </head>
@@ -24,10 +25,33 @@
             <textarea class="form-control" rows="5" id="comment" th:field="*{content}"></textarea>
         </div>
         <div class="text-center">
-            <button class="btn btn-success">댓글쓰기</button>
+            <button type="button" th:onclick="|addComment('${itemId}', '${orderItemId}')|" class="btn btn-success">댓글쓰기</button>
         </div>
     </form>
 </div>
 <div th:replace="~{fragment/navBar :: footer}"></div>
+
+<script>
+    function addComment(itemId, orderItemId) {
+        console.log("실행");
+        axios.post('/comment/add/'+itemId+'/'+orderItemId, {
+            rating: parseInt(document.querySelector('#sel').value),
+            content: document.querySelector('#comment').value
+        }).then(function (response) {
+            console.log(response.data);
+            if (response.data == true) {
+                alert('댓글이 정상적으로 등록되었습니다.');
+                window.history.back();
+                //window.location.replace('/orderDetail/');
+                //document.location.href = \'/path\';'
+            } else {
+                alert('댓글 등록에 실패했습니다.');
+            }
+        })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+</script>
 </body>
 </html>

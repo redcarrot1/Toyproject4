@@ -2,6 +2,7 @@ package com.onchall.onchall.controller.member;
 
 import com.onchall.onchall.dto.MemberDetail;
 import com.onchall.onchall.entity.Member;
+import com.onchall.onchall.entity.MemberState;
 import com.onchall.onchall.form.LoginForm;
 import com.onchall.onchall.form.SignupForm;
 import com.onchall.onchall.service.MemberService;
@@ -79,7 +80,7 @@ public class LoginAndSignupController {
             return "member/signup/signup";
         }
 
-        Member signupMember = memberService.signup(signupForm.getName(), signupForm.getEmail(), signupForm.getPassword());
+        Member signupMember = memberService.signup(signupForm.getName(), signupForm.getEmail(), signupForm.getPassword(), MemberState.TEMPORARY);
         return "member/signup/standby";
     }
 

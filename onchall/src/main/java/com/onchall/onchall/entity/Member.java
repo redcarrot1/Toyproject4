@@ -51,4 +51,5 @@ public class Member {
     public void setPoint(Integer point) {
         this.point = point;
     }
+    public Long getCartId(){return cart.getId();}
 }

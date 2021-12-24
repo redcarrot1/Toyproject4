@@ -30,8 +30,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ItemService {
     private final ItemRepository itemRepository;
-    private final CategoryRepository categoryRepository;
-    private final FileDataRepository fileDataRepository;
+    private final CategoryService categoryService;
+    private final FileDataService fileDataService;
 
     @Value("${store.path.image}")
     private String imageStorePath;
@@ -39,34 +39,37 @@ public class ItemService {
     @Value("${store.path.file}")
     private String fileStorePath;
 
+    @Value("${page.showItemNumberByPage}")
+    private Integer showItemNumberByPage;
+
+    @Value("${page.showPageNumberByPage}")
+    private Integer showPageNumberByPage;
 
     public Pagination sortByCategoryAndPage(String sort, String categoryName, Integer pageNumber) {
-        PageRequest pageRequest = PageRequest.of(pageNumber, 12);
+        PageRequest pageRequest = PageRequest.of(pageNumber, showItemNumberByPage);
         //PageRequest pageRequest = PageRequest.of(page, 12, Sort.by(Sort.Direction.DESC, "username"));
 
         Page<Item> page;
-        if(categoryName.equals("all")) page = itemRepository.findAll(pageRequest);
-        else page = itemRepository.findByCategory(categoryRepository.findByName(categoryName).get(), pageRequest);
-        List<Item> content = page.getContent(); //조회된 데이터
-        List<BoardItemDto> itemList = new ArrayList<>();
-        content.forEach(e -> {
-            itemList.add(new BoardItemDto(e.getName(), e.getStoreImageName(), e.getOriginPrice(), e.getPrice(), e.getId()));
-        });
+        if (categoryName.equals("all")) page = itemRepository.findAll(pageRequest);
+        else page = itemRepository.findByCategory(categoryService.getCategoryByName(categoryName), pageRequest);
 
-        Integer start = (pageNumber / 5) * 5; //한 페이지당 최대 5개씩 페이지 번호 보여주기
-        Integer end = start + 5 - 1;
+        List<BoardItemDto> itemList = new ArrayList<>();
+        page.getContent().forEach(e ->
+                itemList.add(new BoardItemDto(e.getName(), e.getStoreImageName(), e.getOriginPrice(), e.getPrice(), e.getId())));
+
+        Integer start = (pageNumber / showPageNumberByPage) * showPageNumberByPage;
+        Integer end = start + showPageNumberByPage - 1;
         boolean isFirst = page.isFirst();
         boolean isEnd = !page.hasNext();
         Integer totalPageNumber = page.getTotalPages();
 
-        Pagination pagination = new Pagination(start, end, isFirst, isEnd, pageNumber, totalPageNumber, categoryName, sort, itemList);
-        return pagination;
+        return new Pagination(start, end, isFirst, isEnd, pageNumber, totalPageNumber, categoryName, sort, itemList);
     }
 
-    public ItemDetail getItemDetail(Long itemId){
+    public ItemDetail getItemDetail(Long itemId) {
         Item item = itemRepository.getById(itemId);
         List<CommentDto> commentDtoList = new ArrayList<>();
-        item.getComments().forEach(e->{
+        item.getComments().forEach(e -> {
             commentDtoList.add(new CommentDto(e.getMember().getName(), e.getRating(), e.getContent()));
         });
 
@@ -74,44 +77,48 @@ public class ItemService {
                 item.getDescription(), commentDtoList, item.getStoreImageName(), item.getCategory().getId(), item.getCategory().getName());
     }
 
-    public List<BoardItemDto> getItemByCategory(Long categoryId){
-        Category category = categoryRepository.findById(categoryId).get();
+    public List<BoardItemDto> getItem5ByCategory(Long categoryId) {
+        Category category = categoryService.getCategoryById(categoryId);
         List<Item> items = itemRepository.findFirst5ByCategory(category);
         return items.stream()
                 .map(e -> new BoardItemDto(e.getName(), e.getStoreImageName(), e.getOriginPrice(), e.getPrice(), e.getId()))
                 .collect(Collectors.toList());
     }
 
-    public Item findById(Long itemId){
+    public Item getItemById(Long itemId) {
         return itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("아이템이 없습니다."));
     }
 
     public Item addItem(String itemName, Integer price, Integer originPrice, String description,
-                        Long CategoryId, MultipartFile image, MultipartFile fileData) throws IOException {
+                        Long categoryId, MultipartFile image, MultipartFile fileData) throws IOException {
         String imageFullName = createStoreFileName(image.getOriginalFilename());
-        image.transferTo(new File(imageStorePath+imageFullName));
+        image.transferTo(new File(imageStorePath + imageFullName));
 
         String fileFullName = createStoreFileName(fileData.getOriginalFilename());
-        fileData.transferTo(new File(fileStorePath+fileFullName));
-        FileData saveFileData = fileDataRepository.save(new FileData(fileData.getOriginalFilename(), fileFullName));
+        fileData.transferTo(new File(fileStorePath + fileFullName));
+        FileData saveFileData = fileDataService.save(new FileData(fileData.getOriginalFilename(), fileFullName));
 
         Item item = new Item(itemName, price, originPrice, imageFullName, description);
-        Category category = categoryRepository.findById(CategoryId).get();
+        Category category = categoryService.getCategoryById(categoryId);
         item.setCategory(category);
         item.setFileData(saveFileData);
         return itemRepository.save(item);
     }
 
-
-    private String createStoreFileName(String originalFileName){
-        String ext = extractExt(originalFileName);
-        String uuid=UUID.randomUUID().toString();
-        return uuid+"."+ext;
+    public Item getItemByItemId(Long itemId) {
+        return itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 아이템이 없습니다."));
     }
 
-    private String extractExt(String originalFileName){
+    private String createStoreFileName(String originalFileName) {
+        String ext = extractExt(originalFileName);
+        String uuid = UUID.randomUUID().toString();
+        return uuid + "." + ext;
+    }
+
+    private String extractExt(String originalFileName) {
         int pos = originalFileName.lastIndexOf(".");
-        return originalFileName.substring(pos+1);
+        return originalFileName.substring(pos + 1);
     }
 }

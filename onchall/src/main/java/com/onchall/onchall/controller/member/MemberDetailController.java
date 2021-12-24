@@ -29,8 +29,7 @@ import java.util.List;
 public class MemberDetailController {
     private final MemberService memberService;
 
-    @Transactional(readOnly = true)
-    @GetMapping("/memberDetail/download")
+    @GetMapping({"/memberDetail/download", "/"})
     public String downloadList(@Login Member loginMember, Model model) {
         if (loginMember == null) { //세션에 없는 사용자.
             return "redirect:/login";
@@ -50,7 +49,6 @@ public class MemberDetailController {
         return "member/detail/downloadList";
     }
 
-    @Transactional(readOnly = true)
     @GetMapping("/memberDetail/point")
     public String pointDetailList(@Login Member loginMember, Model model) {
         if (loginMember == null) { //세션에 없는 사용자.
@@ -71,7 +69,6 @@ public class MemberDetailController {
         return "member/detail/pointDetail";
     }
 
-    @Transactional(readOnly = true)
     @GetMapping("/memberDetail/order")
     public String orderList(@Login Member loginMember, Model model) {
         if (loginMember == null) { //세션에 없는 사용자.

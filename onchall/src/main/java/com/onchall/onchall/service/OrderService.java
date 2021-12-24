@@ -19,23 +19,20 @@ import java.util.stream.Collectors;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
-    private final CartItemRepository cartItemRepository;
     private final PurchasedRepository purchasedRepository;
-    private final MemberRepository memberRepository;
     private final PointRepository pointRepository;
-
-
-    public Order findById(Long orderId) {
-        return orderRepository.getById(orderId);
-    }
+    private final CartService cartService;
+    private final MemberService MemberService;
 
     @Transactional
     public Order addOrder(Member loginMember, Integer usePoint, String payMethod) {
-        Member member = memberRepository.findById(loginMember.getId()).get();
+        Member member = MemberService.getMemberByMemberId(loginMember.getId());
 
-        Cart cart = member.getCart();
-        List<CartItem> cartItems = cartItemRepository.findByCartId(cart.getId());
-        List<Item> items = cartItems.stream().map(CartItem::getItem).collect(Collectors.toList());
+        List<CartItem> cartItems = cartService.getCartItemListByMemberId(member.getId());
+        List<Item> items = cartItems.stream()
+                .map(CartItem::getItem)
+                .collect(Collectors.toList());
+
         List<OrderItem> orderItems = new ArrayList<>();
         Integer totalPrice = 0;
 
@@ -69,13 +66,15 @@ public class OrderService {
 
         saveOrder.setTotalPrice(totalPrice);
 
-        for (CartItem cartItem : cartItems) {
-            cartItemRepository.delete(cartItem);
-        }
+        cartItems.forEach(cartService::deleteCartItem);
         cartItems.clear();
 
         pointRepository.save(new Point("구매 사용", -usePoint, member));
-
         return saveOrder;
+    }
+
+    public Order getOrderById(Long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 order 이 없습니다."));
     }
 }

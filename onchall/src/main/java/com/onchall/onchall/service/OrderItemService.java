@@ -14,12 +14,13 @@ import java.util.List;
 public class OrderItemService {
     private final OrderItemRepository orderItemRepository;
 
-    public List<OrderItem> findOrderItemsByOrderId(Long orderId){
+    public List<OrderItem> findOrderItemsByOrderId(Long orderId) {
         return orderItemRepository.findByOrderId(orderId);
     }
 
     public void setIsCommentTrue(Long orderItemId) {
-        OrderItem orderItem = orderItemRepository.findById(orderItemId).get();
+        OrderItem orderItem = orderItemRepository.findById(orderItemId)
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 orderItem 이 없습니다."));
         orderItem.setComment(true);
         orderItemRepository.save(orderItem);
     }

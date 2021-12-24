@@ -12,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,15 +23,19 @@ public class CommentController {
     private final ItemService itemService;
 
     @PostMapping("/comment/add/{itemId}/{orderItemId}")
-    //@ResponseBody
+    @ResponseBody
     public String addComment(@Login Member loginMember, @PathVariable Long itemId,
-                             @PathVariable Long orderItemId, @ModelAttribute CommentForm commentForm) {
-        Item item = itemService.findById(itemId);
+                             @PathVariable Long orderItemId, @RequestBody CommentForm commentForm) {
+        log.info("rate={}", commentForm.getRating());
+        log.info("content={}", commentForm.getContent());
+
+        Item item = itemService.getItemById(itemId);
         Comment comment = new Comment(commentForm.getContent(), item, loginMember, commentForm.getRating());
         commentService.save(comment);
         orderItemService.setIsCommentTrue(orderItemId);
         //todo 성공실패 리턴
-        return "redirect:/memberDetail/order";
+        //return "redirect:/memberDetail/order";
+        return "true";
     }
 
     @GetMapping("/comment/add/{itemId}/{orderItemId}")

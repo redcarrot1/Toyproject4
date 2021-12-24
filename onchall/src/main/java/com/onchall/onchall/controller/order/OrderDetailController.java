@@ -24,7 +24,7 @@ public class OrderDetailController {
 
     @GetMapping("/orderDetail/{orderId}")
     public String orderDetail(@PathVariable Long orderId, Model model){
-        Order order = orderService.findById(orderId);
+        Order order = orderService.getOrderById(orderId);
         List<OrderItemDetail> orderItemDetails =
                 orderItemService.findOrderItemsByOrderId(orderId).stream()
                 .map(e -> new OrderItemDetail(e.getId(), e.getItemId(), e.getItemName(), e.getPrice(), e.isComment()))

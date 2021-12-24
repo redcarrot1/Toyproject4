@@ -30,7 +30,7 @@ public class PasswordAndAuthController {
     public String findPassword(@ModelAttribute FindPasswordForm findPasswordForm, BindingResult bindingResult, Model model){
         Member findMember=null;
         try{
-            findMember = memberService.findMemberNameAndEmail(findPasswordForm.getName(), findPasswordForm.getEmail());
+            findMember = memberService.getMemberByNameAndEmail(findPasswordForm.getName(), findPasswordForm.getEmail());
         } catch(Exception e){
             e.printStackTrace();
             bindingResult.reject("findMemberFail", "회원 정보가 없습니다.");

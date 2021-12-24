@@ -15,4 +15,8 @@ public class FileDataService {
         return fileDataRepository.findById(fileDataId)
                 .orElseThrow(() -> new IllegalArgumentException("파일데이터가 존재하지 않습니다."));
     }
+
+    public FileData save(FileData fileData){
+        return fileDataRepository.save(fileData);
+    }
 }

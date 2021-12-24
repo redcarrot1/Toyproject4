@@ -43,9 +43,9 @@ public class InitDB {
     }
 
     public void initMember() {
-        memberService.signupAdmin("testMember1", "asdf@asdf.com", "asdfasdf@");
-        memberService.signupAdmin("testMember2", "asdf2@asdf.com", "asdfasdf@");
-        memberService.signupAdmin("testMember2", "asd3@asdf.com", "asdfasdf@");
+        memberService.signup("testMember1", "asdf@asdf.com", "asdfasdf@", MemberState.ADMIN);
+        memberService.signup("testMember2", "asdf2@asdf.com", "asdfasdf@", MemberState.ADMIN);
+        memberService.signup("testMember2", "asd3@asdf.com", "asdfasdf@", MemberState.ADMIN);
     }
 
     public void initCategory() {
@@ -84,7 +84,7 @@ public class InitDB {
 
     public void initItemFor20() {
         for (int i = 1; i < 11; i++) {
-            Item item = new Item("[온챌개념서]고등수학상" + i, 9000 + i * 50,10000 + i * 100,
+            Item item = new Item("[온챌개념서]고등수학상" + i, 9000 + i * 50, 10000 + i * 100,
                     "[온챌개념서]고등수학상_통합_이미지" + i, "개념과 문제가 함께있는 책" + i);
             Category category = categoryRepository.findByName("고등수학상").get();
             FileData fileData = fileDataRepository.findByUploadName("고등수학상_통합파일").get();
@@ -93,7 +93,7 @@ public class InitDB {
             itemRepository.save(item);
         }
         for (int i = 11; i < 21; i++) {
-            Item item = new Item("[온챌개념서]고등수학하" + i, 9000 + i * 50,10000 + i * 100,
+            Item item = new Item("[온챌개념서]고등수학하" + i, 9000 + i * 50, 10000 + i * 100,
                     "[온챌개념서]고등수학하_통합_이미지" + i, "초보자가 보기 좋은 책" + i);
             Category category = categoryRepository.findByName("고등수학하").get();
             FileData fileData = fileDataRepository.findByUploadName("고등수학하_통합파일").get();
@@ -105,7 +105,7 @@ public class InitDB {
 
     public void initItemFor70() {
         for (int i = 1; i < 36; i++) {
-            Item item = new Item("[온챌개념서]고등수학상" + i, 9000 + i * 50,10000 + i * 100,
+            Item item = new Item("[온챌개념서]고등수학상" + i, 9000 + i * 50, 10000 + i * 100,
                     "testImage.png", "개념과 문제가 함께있는 책" + i);
             Category category = categoryRepository.findByName("고등수학상").get();
             FileData fileData = fileDataRepository.findByUploadName("고등수학상_통합파일").get();
@@ -113,7 +113,7 @@ public class InitDB {
             item.setFileData(fileData);
             itemRepository.save(item);
         }
-        Member testMember1 = memberService.findMemberNameAndEmail("testMember1", "asdf@asdf.com");
+        Member testMember1 = memberService.getMemberByNameAndEmail("testMember1", "asdf@asdf.com");
         //5개는 장바구니에 넣기
         for (int i = 36; i < 41; i++) {
             Item item = new Item("[온챌개념서]고등수학하" + i, 9000 + i * 50, 10000 + i * 100,
@@ -137,10 +137,10 @@ public class InitDB {
     }
 
     @Transactional
-    public void initOrder(){
+    public void initOrder() {
         List<Item> items = itemRepository.findAll();
         List<OrderItem> orderItems = new ArrayList<>();
-        Member testMember1 = memberService.findMemberNameAndEmail("testMember1", "asdf@asdf.com");
+        Member testMember1 = memberService.getMemberByNameAndEmail("testMember1", "asdf@asdf.com");
 
         Order order = new Order();
         order.setOrderDate(LocalDateTime.now());
@@ -148,14 +148,14 @@ public class InitDB {
         order.setOrderItemCount(5);
         order.setRepreItemName(items.get(0).getName());
         order.setMember(testMember1);
-        Integer totalPrice=0;
+        Integer totalPrice = 0;
         order.setTotalPrice(totalPrice);
         order.setUsePoint(3000);
         order.setPayMethod(PayMethod.Card);
 
         Order saveOrder = orderRepository.save(order);
 
-        for(int i=0; i<5; i++){
+        for (int i = 0; i < 5; i++) {
             Item e = items.get(i);
 
             OrderItem orderItem = new OrderItem();
@@ -164,18 +164,18 @@ public class InitDB {
             orderItem.setComment(false);
             orderItem.setPrice(e.getPrice());
             orderItem.setOrder(saveOrder);
-            totalPrice+=e.getPrice();
+            totalPrice += e.getPrice();
 
             OrderItem saveOrderItem = orderItemRepository.save(orderItem);
             saveOrder.getOrderItems().add(saveOrderItem);
-        };
+        }
+        ;
         saveOrder.setTotalPrice(totalPrice);
     }
 
-    public void initPoint(){
-        Member member = memberService.findMemberNameAndEmail("testMember1", "asdf@asdf.com");
+    public void initPoint() {
+        Member member = memberService.getMemberByNameAndEmail("testMember1", "asdf@asdf.com");
         pointRepository.save(new Point("신규가입", 1000, member));
         pointRepository.save(new Point("관리자권한", 3000, member));
-
     }
 }
