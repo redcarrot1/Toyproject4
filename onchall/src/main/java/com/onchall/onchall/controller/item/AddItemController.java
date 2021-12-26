@@ -1,5 +1,6 @@
 package com.onchall.onchall.controller.item;
 
+import com.onchall.onchall.SessionData;
 import com.onchall.onchall.argumentResolver.Login;
 import com.onchall.onchall.dto.CategoryIdAndName;
 import com.onchall.onchall.entity.*;
@@ -7,6 +8,7 @@ import com.onchall.onchall.form.AddCategoryForm;
 import com.onchall.onchall.form.RegisterForm;
 import com.onchall.onchall.service.CategoryService;
 import com.onchall.onchall.service.ItemService;
+import com.onchall.onchall.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,7 @@ import java.util.List;
 public class AddItemController {
     private final ItemService itemService;
     private final CategoryService categoryService;
+    private final MemberService memberService;
 
     @PostMapping("/category/add")
     @ResponseBody
@@ -35,7 +38,8 @@ public class AddItemController {
     }
 
     @GetMapping("/item/add")
-    public String addItemForm(@Login Member loginMember, Model model) {
+    public String addItemForm(@Login SessionData loginMemberId, Model model) {
+        Member loginMember = memberService.getMemberByMemberId(loginMemberId.getMemberId());
         try {
             if (loginMember.getState() != MemberState.ADMIN) {
                 throw new IllegalAccessException("관리자만 게시물 등록이 가능합니다.");

@@ -1,7 +1,11 @@
 package com.onchall.onchall.argumentResolver;
 
+import com.onchall.onchall.SessionData;
 import com.onchall.onchall.entity.Member;
+import com.onchall.onchall.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -13,14 +17,17 @@ import javax.servlet.http.HttpSession;
 
 @Slf4j
 public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolver {
+
     @Override
     //resolveArgument를 실행하기 위한 조건
     //@Login 애노테이션이 존재 && Member 타임이여야 한다.
     public boolean supportsParameter(MethodParameter parameter) {
         boolean hasLoginAnnotation = parameter.hasParameterAnnotation(Login.class);
-        boolean hasMemberType = Member.class.isAssignableFrom(parameter.getParameterType());
+        //boolean hasMemberType = Member.class.isAssignableFrom(parameter.getParameterType());
+        boolean hasMemberType = SessionData.class.isAssignableFrom(parameter.getParameterType());
         return hasLoginAnnotation && hasMemberType;
     }
+
 
     @Override
     //세션에 있는 member 객체를 찾아서 반환. 못찾으면 null 반환
@@ -30,6 +37,6 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         if (session == null) {
             return null;
         }
-        return session.getAttribute("loginMember");
+        return session.getAttribute("loginMemberId");
     }
 }

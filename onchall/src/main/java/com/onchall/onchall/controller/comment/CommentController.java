@@ -1,5 +1,6 @@
 package com.onchall.onchall.controller.comment;
 
+import com.onchall.onchall.SessionData;
 import com.onchall.onchall.argumentResolver.Login;
 import com.onchall.onchall.entity.Comment;
 import com.onchall.onchall.entity.Item;
@@ -7,6 +8,7 @@ import com.onchall.onchall.entity.Member;
 import com.onchall.onchall.form.CommentForm;
 import com.onchall.onchall.service.CommentService;
 import com.onchall.onchall.service.ItemService;
+import com.onchall.onchall.service.MemberService;
 import com.onchall.onchall.service.OrderItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +23,13 @@ public class CommentController {
     private final CommentService commentService;
     private final OrderItemService orderItemService;
     private final ItemService itemService;
+    private final MemberService memberService;
 
     @PostMapping("/comment/add/{itemId}/{orderItemId}")
     @ResponseBody
-    public String addComment(@Login Member loginMember, @PathVariable Long itemId,
+    public String addComment(@Login SessionData loginMemberId, @PathVariable Long itemId,
                              @PathVariable Long orderItemId, @RequestBody CommentForm commentForm) {
+        Member loginMember = memberService.getMemberByMemberId(loginMemberId.getMemberId());
         log.info("rate={}", commentForm.getRating());
         log.info("content={}", commentForm.getContent());
 

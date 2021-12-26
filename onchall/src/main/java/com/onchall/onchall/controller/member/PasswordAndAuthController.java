@@ -1,5 +1,6 @@
 package com.onchall.onchall.controller.member;
 
+import com.onchall.onchall.SessionData;
 import com.onchall.onchall.argumentResolver.Login;
 import com.onchall.onchall.entity.Member;
 import com.onchall.onchall.form.ChangePasswordForm;
@@ -41,10 +42,9 @@ public class PasswordAndAuthController {
     }
 
     @GetMapping("/changePassword")
-    public String changePasswordForm(@Login Member loginMember, Model model){
-        if (loginMember == null) { //세션에 없는 사용자.
-            return "redirect:/login";
-        }
+    public String changePasswordForm(@Login SessionData loginMemberId, Model model){
+        Member loginMember = memberService.getMemberByMemberId(loginMemberId.getMemberId());
+
         ChangePasswordForm changePasswordForm = new ChangePasswordForm();
         changePasswordForm.setEmail(loginMember.getEmail());
         model.addAttribute("changePasswordForm", changePasswordForm);

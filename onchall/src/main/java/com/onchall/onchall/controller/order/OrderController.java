@@ -1,10 +1,12 @@
 package com.onchall.onchall.controller.order;
 
+import com.onchall.onchall.SessionData;
 import com.onchall.onchall.argumentResolver.Login;
 import com.onchall.onchall.entity.*;
 import com.onchall.onchall.form.OrderForm;
 import com.onchall.onchall.form.OrderItemForm;
 import com.onchall.onchall.service.CartService;
+import com.onchall.onchall.service.MemberService;
 import com.onchall.onchall.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,23 +27,25 @@ import java.util.List;
 public class OrderController {
     private final OrderService orderService;
     private final CartService cartService;
+    private final MemberService memberService;
 
     @GetMapping("/order")
-    public String order(@Login Member member, Model model) {
+    public String order(@Login SessionData loginMemberId, Model model) {
+        Member loginMember = memberService.getMemberByMemberId(loginMemberId.getMemberId());
         OrderForm orderForm = new OrderForm();
-        orderForm.setMemberId(member.getId());
-        orderForm.setMemberEmail(member.getEmail());
-        orderForm.setMemberName(member.getName());
-        orderForm.setMemberPoint(member.getPoint());
+        orderForm.setMemberId(loginMember.getId());
+        orderForm.setMemberEmail(loginMember.getEmail());
+        orderForm.setMemberName(loginMember.getName());
+        orderForm.setMemberPoint(loginMember.getPoint());
         orderForm.setUsePoint(0);
 
         Integer totalOrderPrice = 0;
         List<OrderItemForm> orderItemFormList = new ArrayList<>();
-        List<CartItem> cartItemList = cartService.getCartItemListByMemberId(member.getId());
+        List<CartItem> cartItemList = cartService.getCartItemListByMemberId(loginMember.getId());
         for (CartItem cartItem : cartItemList) {
-            Item e = cartItem.getItem();
-            orderItemFormList.add(new OrderItemForm(e.getName(), e.getPrice(), e.getId()));
-            totalOrderPrice += e.getPrice();
+            Item item = cartItem.getItem();
+            orderItemFormList.add(new OrderItemForm(item.getName(), item.getPrice(), item.getId()));
+            totalOrderPrice += item.getPrice();
         }
 
         orderForm.setOrderItemFormList(orderItemFormList);
@@ -51,8 +55,9 @@ public class OrderController {
     }
 
     @PostMapping("/order")
-    public String order(@Login Member member, Model model, @RequestParam Integer usePoint, @RequestParam String payMethod) {
-        Order order = orderService.addOrder(member, usePoint, payMethod);
+    public String order(@Login SessionData loginMemberId, Model model, @RequestParam Integer usePoint, @RequestParam String payMethod) {
+        Member loginMember = memberService.getMemberByMemberId(loginMemberId.getMemberId());
+        Order order = orderService.addOrder(loginMember, usePoint, payMethod);
         model.addAttribute("orderId", order.getId());
         return "order/orderComple";
     }

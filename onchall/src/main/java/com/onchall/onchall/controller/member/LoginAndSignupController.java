@@ -1,5 +1,6 @@
 package com.onchall.onchall.controller.member;
 
+import com.onchall.onchall.SessionData;
 import com.onchall.onchall.dto.MemberDetail;
 import com.onchall.onchall.entity.Member;
 import com.onchall.onchall.entity.MemberState;
@@ -59,7 +60,7 @@ public class LoginAndSignupController {
         }
 
         HttpSession session = request.getSession();
-        session.setAttribute("loginMember", loginMember);
+        session.setAttribute("loginMemberId", new SessionData(loginMember.getId()));
 
         return "redirect:" + redirectURL;
     }
@@ -80,7 +81,7 @@ public class LoginAndSignupController {
             return "member/signup/signup";
         }
 
-        Member signupMember = memberService.signup(signupForm.getName(), signupForm.getEmail(), signupForm.getPassword(), MemberState.TEMPORARY);
+        memberService.signup(signupForm.getName(), signupForm.getEmail(), signupForm.getPassword(), MemberState.TEMPORARY);
         return "member/signup/standby";
     }
 

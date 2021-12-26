@@ -1,5 +1,6 @@
 package com.onchall.onchall.controller.item;
 
+import com.onchall.onchall.SessionData;
 import com.onchall.onchall.argumentResolver.Login;
 import com.onchall.onchall.dto.CartDto;
 import com.onchall.onchall.dto.CartItemDto;
@@ -8,6 +9,7 @@ import com.onchall.onchall.entity.CartItem;
 import com.onchall.onchall.entity.Item;
 import com.onchall.onchall.entity.Member;
 import com.onchall.onchall.service.CartService;
+import com.onchall.onchall.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -23,18 +25,20 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class CartController {
-    public final CartService cartService;
+    private final CartService cartService;
+    private final MemberService memberService;
 
     @GetMapping("/cart")
-    public String cartList(@Login Member loginMember, Model model){
+    public String cartList(@Login SessionData loginMemberId, Model model) {
+        Member loginMember = memberService.getMemberByMemberId(loginMemberId.getMemberId());
         List<CartItem> cartItem = cartService.getCartItemListByMemberId(loginMember.getId());
         List<CartItemDto> cartItemDtoList = new ArrayList<>();
-        Integer totalPrice=0;
-        for(CartItem e : cartItem){
+        Integer totalPrice = 0;
+        for (CartItem e : cartItem) {
             Item item = e.getItem();
-            Integer price =item.getPrice();
+            Integer price = item.getPrice();
             cartItemDtoList.add(new CartItemDto(item.getName(), price, item.getId()));
-            totalPrice+=price;
+            totalPrice += price;
         }
         CartDto cartDto = new CartDto(cartItemDtoList, totalPrice);
         model.addAttribute("cart", cartDto);
@@ -45,10 +49,10 @@ public class CartController {
 
     @GetMapping("/cart/add/{itemId}")
     @ResponseBody
-    public String addItemInCart(@Login Member loginMember, @PathVariable Long itemId){
-        try{
-            cartService.addItem(loginMember.getId(), itemId);
-        } catch (Exception e){
+    public String addItemInCart(@Login SessionData loginMemberId, @PathVariable Long itemId) {
+        try {
+            cartService.addItem(loginMemberId.getMemberId(), itemId);
+        } catch (Exception e) {
             e.printStackTrace();
             return "false";
         }
@@ -56,8 +60,8 @@ public class CartController {
     }
 
     @GetMapping("/cart/delete/{itemId}")
-    public String deleteItemInCart(@Login Member loginMember, @PathVariable("itemId") Long itemId){
-        cartService.deleteItem(loginMember.getId(), itemId);
+    public String deleteItemInCart(@Login SessionData loginMemberId, @PathVariable("itemId") Long itemId) {
+        cartService.deleteItem(loginMemberId.getMemberId(), itemId);
         return "redirect:/cart";
     }
 

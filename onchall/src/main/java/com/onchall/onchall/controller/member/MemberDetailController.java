@@ -1,5 +1,6 @@
 package com.onchall.onchall.controller.member;
 
+import com.onchall.onchall.SessionData;
 import com.onchall.onchall.argumentResolver.Login;
 import com.onchall.onchall.dto.Download;
 import com.onchall.onchall.dto.MemberDetail;
@@ -30,13 +31,11 @@ public class MemberDetailController {
     private final MemberService memberService;
 
     @GetMapping({"/memberDetail/download", "/"})
-    public String downloadList(@Login Member loginMember, Model model) {
-        if (loginMember == null) { //세션에 없는 사용자.
-            return "redirect:/login";
-        }
+    public String downloadList(@Login SessionData loginMemberId, Model model) {
+        Member loginMember = memberService.getMemberByMemberId(loginMemberId.getMemberId());
 
         List<Download> downloadList = new ArrayList<>();
-        List<Purchased> purchased = memberService.getPurchased(loginMember.getId());
+        List<Purchased> purchased = memberService.getPurchased(loginMemberId.getMemberId());
         purchased.forEach(e ->
                 downloadList.add(new Download(e.getItemName(), e.getExpiryDate(), e.getFileData().getStoreName(), e.getFileData().getId())));
 
@@ -50,12 +49,10 @@ public class MemberDetailController {
     }
 
     @GetMapping("/memberDetail/point")
-    public String pointDetailList(@Login Member loginMember, Model model) {
-        if (loginMember == null) { //세션에 없는 사용자.
-            return "redirect:/login";
-        }
+    public String pointDetailList(@Login SessionData loginMemberId, Model model) {
+        Member loginMember = memberService.getMemberByMemberId(loginMemberId.getMemberId());
         List<PointDetail> pointDetails = new ArrayList<>();
-        List<Point> pointHistory = memberService.getPointHistory(loginMember.getId());
+        List<Point> pointHistory = memberService.getPointHistory(loginMemberId.getMemberId());
         pointHistory.forEach(e -> {
             pointDetails.add(new PointDetail(e.getDescription(), e.getDateTime(), e.getValue()));
         });
@@ -70,13 +67,11 @@ public class MemberDetailController {
     }
 
     @GetMapping("/memberDetail/order")
-    public String orderList(@Login Member loginMember, Model model) {
-        if (loginMember == null) { //세션에 없는 사용자.
-            return "redirect:/login";
-        }
+    public String orderList(@Login SessionData loginMemberId, Model model) {
+        Member loginMember = memberService.getMemberByMemberId(loginMemberId.getMemberId());
 
         List<OrderSimple> orderSimpleList = new ArrayList<>();
-        List<Order> orders = memberService.getOrder(loginMember.getId());
+        List<Order> orders = memberService.getOrder(loginMemberId.getMemberId());
         orders.forEach(e ->
                 orderSimpleList.add(new OrderSimple(e.getId(), e.getRepreItemName(), e.getOrderItemCount() - 1, e.getOrderDate(), e.getTotalPrice())));
 
