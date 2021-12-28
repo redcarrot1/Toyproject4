@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragment/header :: common_header_t(~{::title})}">
+    <title>alert</title>
+</head>
+
+<body>
+<div th:replace="~{fragment/navBar :: nav}"></div>
+<div class="container pt-5">
+
+</div>
+<div th:replace="~{fragment/navBar :: footer}"></div>
+
+<script th:inline="javascript">
+    alert("게시물 등록에 실패했습니다.");
+    document.location.href = '/item/add';
+</script>
+</body>
+</html>

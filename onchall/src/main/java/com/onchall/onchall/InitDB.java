@@ -44,8 +44,8 @@ public class InitDB {
 
     public void initMember() {
         memberService.signup("testMember1", "asdf@asdf.com", "asdfasdf@", MemberState.ADMIN);
-        memberService.signup("testMember2", "asdf2@asdf.com", "asdfasdf@", MemberState.ADMIN);
-        memberService.signup("testMember2", "asd3@asdf.com", "asdfasdf@", MemberState.ADMIN);
+        memberService.signup("testMember2", "asdf2@asdf.com", "asdfasdf@", MemberState.USER);
+        memberService.signup("testMember2", "asd3@asdf.com", "asdfasdf@", MemberState.TEMPORARY);
     }
 
     public void initCategory() {

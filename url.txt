@@ -1,0 +1,6 @@
+@PostMapping("/comment/add/{itemId}/{orderItemId}")
+ @GetMapping("/comment/add/{itemId}/{orderItemId}")
+
+@PostMapping("/category/add")
+@GetMapping("/item/add")
+ @PostMapping("/item/add")

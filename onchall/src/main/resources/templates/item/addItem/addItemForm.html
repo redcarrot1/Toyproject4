@@ -13,8 +13,14 @@
         <ul>
             <li>이미지 파일 <input type="file" multiple="multiple" accept="image/*" th:field="*{image}"/></li>
             <li>이름 <input type="text" th:field="*{itemName}"/></li>
+            <div class="field-error" th:errors="*{itemName}" style="color: red;"/>
+
             <li>원래 가격 <input type="number" th:field="*{originPrice}"/></li>
+            <div class="field-error" th:errors="*{originPrice}" style="color: red;"/>
+
             <li>판매 가격 <input type="number" th:field="*{price}"/></li>
+            <div class="field-error" th:errors="*{price}" style="color: red;"/>
+
             <li>상품 설명 <textarea th:field="*{description}"/></li>
             <li id="categoryLi">
                 <select th:field="*{categoryId}">

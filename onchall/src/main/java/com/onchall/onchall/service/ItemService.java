@@ -92,6 +92,8 @@ public class ItemService {
 
     public Item addItem(String itemName, Integer price, Integer originPrice, String description,
                         Long categoryId, MultipartFile image, MultipartFile fileData) throws IOException {
+        Category category = categoryService.getCategoryById(categoryId);
+
         String imageFullName = createStoreFileName(image.getOriginalFilename());
         image.transferTo(new File(imageStorePath + imageFullName));
 
@@ -100,7 +102,7 @@ public class ItemService {
         FileData saveFileData = fileDataService.save(new FileData(fileData.getOriginalFilename(), fileFullName));
 
         Item item = new Item(itemName, price, originPrice, imageFullName, description);
-        Category category = categoryService.getCategoryById(categoryId);
+
         item.setCategory(category);
         item.setFileData(saveFileData);
         return itemRepository.save(item);

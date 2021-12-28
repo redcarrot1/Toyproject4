@@ -2,8 +2,9 @@ package com.onchall.onchall.controller.item;
 
 import com.onchall.onchall.SessionData;
 import com.onchall.onchall.argumentResolver.Login;
-import com.onchall.onchall.dto.CategoryIdAndName;
-import com.onchall.onchall.entity.*;
+import com.onchall.onchall.entity.Item;
+import com.onchall.onchall.entity.Member;
+import com.onchall.onchall.entity.MemberState;
 import com.onchall.onchall.form.AddCategoryForm;
 import com.onchall.onchall.form.RegisterForm;
 import com.onchall.onchall.service.CategoryService;
@@ -13,9 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @Slf4j
@@ -30,11 +31,11 @@ public class AddItemController {
     public String addCategory(@RequestBody AddCategoryForm form) {
         try {
             categoryService.addCategory(form.getName());
-            return "true";
         } catch (Exception e) {
             e.printStackTrace();
             return "false";
         }
+        return "true";
     }
 
     @GetMapping("/item/add")
@@ -46,8 +47,7 @@ public class AddItemController {
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-            //todo json 형식으로 받아서 alert 로 처리
-            return "member/login/login";
+            return "alert/itemAddOnlyAdminAlert";
         }
 
         model.addAttribute("registerForm", new RegisterForm());
@@ -56,15 +56,20 @@ public class AddItemController {
     }
 
     @PostMapping("/item/add")
-    public String addItem(@ModelAttribute RegisterForm form, Model model) {
+    public String addItem(@Validated @ModelAttribute RegisterForm form, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            log.info("errors={}", bindingResult);
+            model.addAttribute("categoryList", categoryService.getCategoryIdAndName());
+            return "item/addItem/addItemForm";
+        }
+
         try {
             Item item = itemService.addItem(form.getItemName(), form.getPrice(), form.getOriginPrice(), form.getDescription(),
                     form.getCategoryId(), form.getImage(), form.getFileData());
             model.addAttribute("itemId", item.getId());
         } catch (Exception e) {
             e.printStackTrace();
-            //todo 등록 실패
-            return "member/login/login";
+            return "alert/itemAddFailAlert";
         }
         return "item/addItem/addItemComplete";
     }

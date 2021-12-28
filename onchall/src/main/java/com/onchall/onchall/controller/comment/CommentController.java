@@ -25,29 +25,28 @@ public class CommentController {
     private final ItemService itemService;
     private final MemberService memberService;
 
-    @PostMapping("/comment/add/{itemId}/{orderItemId}")
-    @ResponseBody
-    public String addComment(@Login SessionData loginMemberId, @PathVariable Long itemId,
-                             @PathVariable Long orderItemId, @RequestBody CommentForm commentForm) {
-        Member loginMember = memberService.getMemberByMemberId(loginMemberId.getMemberId());
-        log.info("rate={}", commentForm.getRating());
-        log.info("content={}", commentForm.getContent());
-
-        Item item = itemService.getItemById(itemId);
-        Comment comment = new Comment(commentForm.getContent(), item, loginMember, commentForm.getRating());
-        commentService.save(comment);
-        orderItemService.setIsCommentTrue(orderItemId);
-        //todo 성공실패 리턴
-        //return "redirect:/memberDetail/order";
-        return "true";
-    }
-
     @GetMapping("/comment/add/{itemId}/{orderItemId}")
     public String addCommentForm(@PathVariable Long itemId, @PathVariable Long orderItemId, Model model) {
-        //todo 아이템이 아직도 존재하는가 검사
         model.addAttribute("commentForm", new CommentForm());
         model.addAttribute("itemId", itemId);
         model.addAttribute("orderItemId", orderItemId);
         return "comment/commentAdd";
+    }
+
+    @PostMapping("/comment/add/{itemId}/{orderItemId}")
+    @ResponseBody
+    public String addComment(@Login SessionData loginMemberId, @PathVariable Long itemId,
+                             @PathVariable Long orderItemId, @RequestBody CommentForm commentForm) {
+        try {
+            Member loginMember = memberService.getMemberByMemberId(loginMemberId.getMemberId());
+            Item item = itemService.getItemById(itemId);
+            Comment comment = new Comment(commentForm.getContent(), item, loginMember, commentForm.getRating());
+            commentService.save(comment);
+            orderItemService.setIsCommentTrue(orderItemId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "false";
+        }
+        return "true";
     }
 }

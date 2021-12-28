@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +30,9 @@ public class CategoryService {
     }
 
     public Category addCategory(String name){
+        Optional<Category> findCategory = categoryRepository.findByName(name);
+        if(findCategory.isPresent()) throw new IllegalArgumentException("이미 존재하는 카테고리입니다.");
+
         Category category = new Category();
         category.setName(name);
         return categoryRepository.save(category);
