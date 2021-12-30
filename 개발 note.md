@@ -1,12 +1,7 @@
-# jpa 헷갈렸던 부분들
+### 연관관계 편의 메서드
 
-
-
-
-
-- 연관관계 편의 메서드
-  - 한 곳만 작성하거나, 양쪽 다 작성할 수 있다.
-  - 단, 양쪽에 다 작성하면 무한루프에 빠지므로 반드시 검사 검사 로직이 필요하다.
+- 한 곳만 작성하거나, 양쪽 다 작성할 수 있다.
+- 단, 양쪽에 다 작성하면 무한루프에 빠지므로 반드시 검사 검사 로직이 필요하다.
 
 ```java
 public class Member {
@@ -45,16 +40,24 @@ public void setTeam(Team team){
 
 
 
-- JPA 기본 페치 전략
-  - `@ManyToOne`,  `@OneToOne` : 즉시 로딩 -> 변경해줘야함
-  - `@OneToMany`, `@ManyToMany`: 지연 로딩
+
+
+
+
+### JPA 기본 페치 전략
+
+- `@ManyToOne`,  `@OneToOne` : 즉시 로딩 -> 변경해줘야함
+- `@OneToMany`, `@ManyToMany`: 지연 로딩
 
 
 
 
 
-- 영속성 전이: cascade
-  - 엔티티를 영속 상태로 만들 때 연관된 엔티티도 함께 영속 상태로 만들고 싶을 때
+
+
+### 영속성 전이: cascade
+
+- 엔티티를 영속 상태로 만들 때 연관된 엔티티도 함께 영속 상태로 만들고 싶을 때
 
 ```java
 //부모
@@ -82,8 +85,6 @@ em.persist(parent); //부모만 저장해도 연관된 자식들도 자동으로
 
 
 
-
-
 - cascade.remove와 orphanRemoval=true
   - 사실 둘은 매우 비슷한 기능이다. 일반적으로 사용하면 큰 차이는 없다.
   - casecade.remove: 부모가 삭제될때 자식도 함께 삭제.
@@ -100,7 +101,7 @@ em.persist(parent); //부모만 저장해도 연관된 자식들도 자동으로
 
 
 
-- @Enumerated
+### @Enumerated
 
 ```java
 enum RoleType{
@@ -135,8 +136,6 @@ Slice<Member> findByUsername(String name, Pageable pageable); //count 쿼리 사
 안함
 ```
 
-
-
 - 사용 예제(주의: 페이지는 0부터 시작이다.)
 
 ```java
@@ -169,11 +168,7 @@ assertThat(page.hasNext()).isTrue(); //다음 페이지가 있는가?
 
 
 
-
-
-
-
-이미지 보여주기
+### 이미지 보여주기
 
 ```java
 @ResponseBody
@@ -196,7 +191,7 @@ public Resource showImage(@PathVariable String filename) throws MalformedURLExce
 
 
 
-첨부파일 다운로드
+### 첨부파일 다운로드
 
 ```java
 @GetMapping("/attach/{fileDataId}")
